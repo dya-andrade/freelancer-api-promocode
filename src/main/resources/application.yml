@@ -1,0 +1,12 @@
+spring:
+  r2dbc:
+    url: r2dbc:postgresql://localhost:5432/postgres?schema=promo_code
+    username: root
+    password: root
+  jpa:
+    hibernate.ddl-auto: create
+    generate-ddl: true
+    properties:
+      hibernate:
+      dialect: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: false
