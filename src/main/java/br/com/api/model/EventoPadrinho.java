@@ -1,8 +1,8 @@
 package br.com.api.model;
 
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.experimental.SuperBuilder;
 
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -10,7 +10,7 @@ import javax.persistence.Table;
 
 @Data
 @Entity
-@SuperBuilder
+@Builder
 @Table(name = "evento_padrinho")
 @EqualsAndHashCode(callSuper = true)
 public class EventoPadrinho extends BaseEntity {

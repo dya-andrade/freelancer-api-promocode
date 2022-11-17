@@ -1,14 +1,14 @@
 package br.com.api.model;
 
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 
 @Data
 @Entity
-@SuperBuilder
+@Builder
 @Table(name = "cliente")
 @EqualsAndHashCode(callSuper = true)
 public class Cliente extends BaseEntity {

@@ -1,12 +1,12 @@
 package br.com.api.model;
 
-import lombok.Builder;
 import lombok.Data;
 
+import javax.persistence.MappedSuperclass;
 import java.time.LocalDateTime;
 
 @Data
-@Builder
+@MappedSuperclass
 public abstract class BaseEntity {
 
     private LocalDateTime dtCriacao;

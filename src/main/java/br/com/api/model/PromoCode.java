@@ -1,8 +1,8 @@
 package br.com.api.model;
 
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.experimental.SuperBuilder;
 
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
@@ -11,7 +11,7 @@ import javax.persistence.Table;
 
 @Data
 @Entity
-@SuperBuilder
+@Builder
 @Table(name = "promo_code")
 @EqualsAndHashCode(callSuper = true)
 public class PromoCode extends BaseEntity {

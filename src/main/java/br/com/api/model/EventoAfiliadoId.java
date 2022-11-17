@@ -3,11 +3,17 @@ package br.com.api.model;
 import lombok.Data;
 
 import javax.persistence.Embeddable;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+import java.io.Serializable;
 
 @Data
 @Embeddable
-public class EventoAfiliadoId {
+public class EventoAfiliadoId implements Serializable {
 
-    private PromoCode promoCodeId;
-    private Cliente clienteAfiliadoId;
+    @OneToOne
+    private PromoCode promoCode;
+    @ManyToOne
+    private Cliente clienteAfiliado;
 }

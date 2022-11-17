@@ -1,8 +1,19 @@
 package br.com.api.model;
 
-import javax.persistence.EmbeddedId;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
-public class EventoManual {
+import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
+@Data
+@Entity
+@Builder
+@Table(name = "evento_manual")
+@EqualsAndHashCode(callSuper = true)
+public class EventoManual extends BaseEntity {
 
     @EmbeddedId
     private EventoManualId eventoManualId;

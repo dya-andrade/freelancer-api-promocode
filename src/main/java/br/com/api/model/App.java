@@ -1,8 +1,8 @@
 package br.com.api.model;
 
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 import java.util.UUID;
@@ -10,7 +10,7 @@ import java.util.UUID;
 
 @Data
 @Entity
-@SuperBuilder
+@Builder
 @Table(name = "app")
 @EqualsAndHashCode(callSuper = true)
 public class App extends BaseEntity {

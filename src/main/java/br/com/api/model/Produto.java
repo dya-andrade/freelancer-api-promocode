@@ -1,14 +1,14 @@
 package br.com.api.model;
 
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 
 @Data
 @Entity
-@SuperBuilder
+@Builder
 @Table(name = "produto")
 @EqualsAndHashCode(callSuper = true)
 public class Produto extends BaseEntity {
@@ -21,6 +21,6 @@ public class Produto extends BaseEntity {
     private Integer moedaAfiliado;
     private Integer moedaPadrinho;
     @Column(columnDefinition = "integer default 3")
-    private Integer limiteAplicaoBonusPadrinho;
+    private Integer limiteAplicacaoBonusPadrinho;
     private String postWebhockPadrinho;
 }
