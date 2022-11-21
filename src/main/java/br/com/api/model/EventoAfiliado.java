@@ -2,6 +2,7 @@ package br.com.api.model;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.EmbeddedId;
@@ -12,6 +13,7 @@ import java.io.Serializable;
 @Data
 @Entity
 @SuperBuilder
+@NoArgsConstructor
 @Table(name = "evento_afiliado")
 @EqualsAndHashCode(callSuper = true)
 public class EventoAfiliado extends BaseEntity implements Serializable {

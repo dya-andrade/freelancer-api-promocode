@@ -2,16 +2,18 @@ package br.com.api.model;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.UUID;
 
 
 @Data
 @Entity
 @SuperBuilder
+@NoArgsConstructor
 @Table(name = "app")
 @EqualsAndHashCode(callSuper = true)
 public class App extends BaseEntity implements Serializable {
@@ -19,8 +21,9 @@ public class App extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private UUID uid;
+    @GeneratedValue(generator = "system-uuid")
+    @GenericGenerator(name = "system-uuid", strategy = "uuid")
+    private String uid;
     private String nome;
     private String token;
 }
