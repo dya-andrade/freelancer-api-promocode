@@ -1,9 +1,14 @@
+server:
+  port: 8080
+
 spring:
   datasource:
     driverClassName: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/promo_code
+    url: jdbc:postgresql://localhost:5432/promo_code?currentSchema=public
     username: root
     password: root
+  flyway:
+    baselineOnMigrate: true
   jpa:
     hibernate:
       ddl-auto: update
