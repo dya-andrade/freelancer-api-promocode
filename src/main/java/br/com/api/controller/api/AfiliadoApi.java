@@ -7,12 +7,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.validation.annotation.Validated;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-
-@Validated
 @Tag(name = "Afiliado", description = "Endpoints do afiliado.")
 @ApiResponse(responseCode = "500", description = "Internal Error.")
 public interface AfiliadoApi {
@@ -25,7 +20,6 @@ public interface AfiliadoApi {
         @ApiResponse(description = "Unauthorized", responseCode = "401", content = @Content),
         @ApiResponse(description = "Not Found", responseCode = "404", content = @Content),
         @ApiResponse(description = "Internal Error", responseCode = "500", content = @Content), })
-    AfiliadoSaldoDTO aplicaPromoCode(@NotBlank String token, @NotBlank String uidApp, @NotBlank String idCliente,
-        @NotBlank String promocode, @NotNull ClienteDTO clienteAfiliadoDTO);
+    AfiliadoSaldoDTO aplicaPromoCode(String token, String uidApp, String idCliente, String promocode, ClienteDTO clienteAfiliadoDTO);
 
 }

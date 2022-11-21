@@ -43,10 +43,4 @@ public interface EventoPadrinhoRepository extends JpaRepository<EventoPadrinho, 
 
     Optional<EventoPadrinho> findByEventoPadrinhoIdUid(String uid);
 
-    @Query(value = "SELECT COUNT(ep)" +
-        "  FROM EventoPadrinho ep INNER JOIN PromoCode pc " +
-        "  ON ep.eventoPadrinhoId.eventoAfiliado.eventoAfiliadoId.promoCode = pc" +
-        "  WHERE ep.eventoPadrinhoId.eventoAfiliado.eventoAfiliadoId.promoCode = :promoCode")
-    Long consultaQtdAplicacoesPromoCode(PromoCode promoCode);
-
 }

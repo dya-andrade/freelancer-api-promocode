@@ -17,7 +17,6 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
-@Validated
 @Tag(name = "Padrinho", description = "Endpoints do padrinho.")
 @ApiResponse(responseCode = "500", description = "Internal Error.")
 public interface PadrinhoApi {
@@ -30,7 +29,7 @@ public interface PadrinhoApi {
         @ApiResponse(description = "Unauthorized", responseCode = "401", content = @Content),
         @ApiResponse(description = "Not Found", responseCode = "404", content = @Content),
         @ApiResponse(description = "Internal Error", responseCode = "500", content = @Content), })
-    PadrinhoSaldoDTO consultaSaldo(@NotBlank String token, @NotBlank String uidApp, @NotBlank String idCliente);
+    PadrinhoSaldoDTO consultaSaldo(String token, String uidApp, String idCliente);
 
 
     @Operation(summary = "Consulta Detalhada", description = "Endpoint para consultar detalhes, com sucesso, retorna lista de promocodes.",
@@ -41,8 +40,7 @@ public interface PadrinhoApi {
         @ApiResponse(description = "Unauthorized", responseCode = "401", content = @Content),
         @ApiResponse(description = "Not Found", responseCode = "404", content = @Content),
         @ApiResponse(description = "Internal Error", responseCode = "500", content = @Content), })
-    List<PromoCodeDTO> consultaDetalhada(@NotBlank String token, @NotBlank String uidApp, @NotBlank String idCliente, @NotBlank String dataInicio,
-        @NotBlank String dataFim, @NotNull ClienteDTO clientePadrinhoDTO);
+    List<PromoCodeDTO> consultaDetalhada(String token, String uidApp, String idCliente, String dataInicio, String dataFim, ClienteDTO clientePadrinhoDTO);
 
 
     @Operation(summary = "Cria PromoCode", description = "Endpoint para criar promocode, com sucesso, retorna promocodes.",
@@ -53,7 +51,7 @@ public interface PadrinhoApi {
         @ApiResponse(description = "Unauthorized", responseCode = "401", content = @Content),
         @ApiResponse(description = "Not Found", responseCode = "404", content = @Content),
         @ApiResponse(description = "Internal Error", responseCode = "500", content = @Content), })
-    PromoCodeDTO criaPromoCode(@NotBlank String token, @NotBlank String uidApp, @NotBlank String idCliente, @NotBlank String produtoId);
+    PromoCodeDTO criaPromoCode(String token, String uidApp, String idCliente, String produtoId);
 
 
     @Operation(summary = "Cria Evento Manual", description = "Endpoint para criar evento manual, com sucesso, retorna ok.",
@@ -64,6 +62,6 @@ public interface PadrinhoApi {
         @ApiResponse(description = "Unauthorized", responseCode = "401", content = @Content),
         @ApiResponse(description = "Not Found", responseCode = "404", content = @Content),
         @ApiResponse(description = "Internal Error", responseCode = "500", content = @Content), })
-    RetornoDTO criaEventoManual(@NotBlank String token, @NotBlank String uidApp, @NotBlank String idCliente, @NotNull EventoManualDTO eventoManualDTO);
+    RetornoDTO criaEventoManual(String token, String uidApp, String idCliente, EventoManualDTO eventoManualDTO);
 
 }

@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Embeddable;
+import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import java.io.Serializable;
 
@@ -20,7 +21,7 @@ public class PromoCodeID implements Serializable {
 
     @ManyToOne
     private Cliente clientePadrinho;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private Produto produto;
 
 }

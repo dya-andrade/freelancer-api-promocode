@@ -33,8 +33,6 @@ public class AfiliadoServiceImpl implements AfiliadoService {
 
     private final PromoCodeRepository promoCodeRepository;
 
-    private final ProdutoRepository produtoRepository;
-
     private final EventoPadrinhoRepository eventoPadrinhoRepository;
 
     private final EventoAfiliadoRepository eventoAfiliadoRepository;
@@ -58,7 +56,7 @@ public class AfiliadoServiceImpl implements AfiliadoService {
     public AfiliadoSaldoDTO aplicaPromoCode(final App app, final String idCliente, final String promocode, final ClienteDTO clienteAfiliadoDTO) {
 
         var promoCode = promoCodeRepository.findByPromoCode(promocode)
-            .orElseThrow(() -> new ResourceNotFoundException("Erro ao tentar buscar promocode, code não encontrado."));
+            .orElseThrow(() -> new ResourceNotFoundException("Erro ao tentar buscar promocode, promocode não encontrado."));
 
         var clienteAfiliado = clienteService.validaClienteExistente(app, idCliente, clienteAfiliadoDTO);
 
@@ -70,15 +68,20 @@ public class AfiliadoServiceImpl implements AfiliadoService {
         var eventoAfiliadoOptional = eventoAfiliadoRepository.findById(eventoAfiliadoID);
 
         if (eventoAfiliadoOptional.isPresent()) {
-            throw new ResourceConflictException("Erro ao tentar aplicar promocode, code já foi aplicado.");
+            throw new ResourceConflictException("Erro ao tentar aplicar promocode, promocode já foi aplicado.");
+        }
+
+        var padrinhoPromoCode = promoCode.getPromoCodeId().getClientePadrinho();
+
+        if(clienteAfiliado.getClienteId().equals(padrinhoPromoCode.getClienteId())){
+            throw new ResourceConflictException("Erro ao tentar aplicar promocode, cliente é padrinho do promocode.");
         }
 
         var qtdAplicacoesAfiliado = eventoAfiliadoRepository.consultaQtdAplicacoesPromoCode(promoCode);
 
-        if (promoCode.getLimiteAplicacoesAfiliados() > 0 && qtdAplicacoesAfiliado <= promoCode.getLimiteAplicacoesAfiliados()) {
+        if (promoCode.getLimiteAplicacoesAfiliados() > 0 && qtdAplicacoesAfiliado < promoCode.getLimiteAplicacoesAfiliados()) {
 
-            var produto = produtoRepository.findById(promoCode.getPromoCodeId().getProduto().getProdutoId())
-                .orElseThrow(() -> new ResourceNotFoundException("Erro ao tentar buscar produto, ID não encontrado."));
+            var produto = promoCode.getPromoCodeId().getProduto();
 
             var eventoAfiliado = eventoAfiliadoRepository.save(
                 EventoAfiliado.builder()
@@ -90,10 +93,6 @@ public class AfiliadoServiceImpl implements AfiliadoService {
                     .dtCriacao(LocalDateTime.now())
                     .build());
 
-            var qtdAplicacoesPadrinho = eventoPadrinhoRepository.consultaQtdAplicacoesPromoCode(promoCode);
-
-            if (produto.getLimiteAplicacaoBonusPadrinho() > 0 && qtdAplicacoesPadrinho <= produto.getLimiteAplicacaoBonusPadrinho()) {
-
                 eventoPadrinhoRepository.save(
                     EventoPadrinho.builder()
                         .eventoPadrinhoId(EventoPadrinhoID.builder()
@@ -103,12 +102,10 @@ public class AfiliadoServiceImpl implements AfiliadoService {
                         .moeda(produto.getMoedaPadrinho())
                         .dtCriacao(LocalDateTime.now())
                         .build());
-            }
 
             return new AfiliadoSaldoDTO(produto.getMoedaAfiliado());
+        } else {
+            throw new ResourceConflictException("Erro ao tentar aplicar promocode, promocode está expirado.");
         }
-
-        return new AfiliadoSaldoDTO(0);
     }
-
 }
