@@ -1,8 +1,8 @@
 package br.com.api.model;
 
-import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
@@ -11,6 +11,7 @@ import java.io.Serializable;
 @Data
 @Entity
 @SuperBuilder
+@NoArgsConstructor
 @Table(name = "produto")
 @EqualsAndHashCode(callSuper = true)
 public class Produto extends BaseEntity implements Serializable {
