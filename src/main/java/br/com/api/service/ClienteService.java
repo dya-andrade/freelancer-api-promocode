@@ -14,4 +14,5 @@ public interface ClienteService {
     Cliente validaClienteExistente(@NotNull App app, @NotBlank String idCliente, @NotNull ClienteDTO clienteDTO);
 
     Cliente buscaCliente(@NotNull App app, @NotBlank String idCliente);
+
 }

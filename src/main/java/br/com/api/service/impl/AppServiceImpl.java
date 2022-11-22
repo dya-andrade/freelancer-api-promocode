@@ -11,6 +11,8 @@ import org.springframework.validation.annotation.Validated;
 
 import javax.transaction.Transactional;
 
+import static br.com.api.exception.util.MessageException.APP_NAO_ENCONTRADO;
+
 @Log4j2
 @Service
 @Transactional
@@ -21,8 +23,12 @@ public class AppServiceImpl implements AppService {
 
     @Override
     public App autenticaApp(final String uidApp, final String token) {
+        log.info("SERVICE: AUTENTICA APP");
+
+        log.info("Busca app, UID: " + uidApp);
+
         return appRepository.findByUidAndToken(uidApp, token)
-            .orElseThrow(() -> new InvalidAuthenticationException("Erro ao tentar autenticar App, UID ou Token inválidos."));
+            .orElseThrow(() -> new InvalidAuthenticationException(APP_NAO_ENCONTRADO));
     }
 
 }

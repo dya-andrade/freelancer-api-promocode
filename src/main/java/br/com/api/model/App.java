@@ -26,4 +26,5 @@ public class App extends BaseEntity implements Serializable {
     private String uid;
     private String nome;
     private String token;
+
 }

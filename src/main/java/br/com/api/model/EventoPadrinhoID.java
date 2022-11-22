@@ -20,7 +20,7 @@ public class EventoPadrinhoID implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @GeneratedValue( generator = "system-uuid")
+    @GeneratedValue(generator = "system-uuid")
     @GenericGenerator(name = "system-uuid", strategy = "uuid")
     private String uid;
     @ManyToOne

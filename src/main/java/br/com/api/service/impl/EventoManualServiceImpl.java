@@ -20,6 +20,7 @@ import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import static br.com.api.exception.util.MessageException.EVENTO_SALDO_INSUFICIENTE;
 import static br.com.api.model.TipoEventoManual.RET;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
@@ -42,6 +43,8 @@ public class EventoManualServiceImpl implements EventoManualService {
     }
 
     private RetornoDTO validaEventoManualDuplicidade(final Cliente cliente, final EventoManualDTO eventoManualDTO) {
+
+        log.info("Verifica duplicidade evento manual.");
 
         EventoManual eventoManual = null;
 
@@ -84,16 +87,26 @@ public class EventoManualServiceImpl implements EventoManualService {
 
     @Override
     public RetornoDTO criaEventoManual(final App app, final String idCliente, final EventoManualDTO eventoManualDTO) {
+
+        log.info("SERVICE: CRIA EVENTO MANUAL");
+
+        log.info("Busca cliente." );
+
         var cliente = clienteService.buscaCliente(app, idCliente);
+
+        log.info("Verifica o tipo de evento manual.");
 
         if (eventoManualDTO.getTipo().equals(RET)) {
             var saldoPadrinho = padrinhoService.consultaSaldo(app, idCliente).getSaldoAtual();
 
-            if (saldoPadrinho >= eventoManualDTO.getMoeda()) {
+            log.info("Verifica se o saldo é suficiente.");
+
+            if (saldoPadrinho >= Math.abs(eventoManualDTO.getMoeda())) {
+                eventoManualDTO.setMoeda(eventoManualDTO.getMoeda() * -1);
                 return validaEventoManualDuplicidade(cliente, eventoManualDTO);
             }
 
-            throw new ResourceConflictException("Erro ao tentar criar evento, saldo insuficiente.");
+            throw new ResourceConflictException(EVENTO_SALDO_INSUFICIENTE);
         }
 
         return validaEventoManualDuplicidade(cliente, eventoManualDTO);

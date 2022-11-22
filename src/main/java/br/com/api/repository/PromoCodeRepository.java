@@ -15,4 +15,5 @@ public interface PromoCodeRepository extends JpaRepository<PromoCode, PromoCodeI
     Optional<PromoCode> findByPromoCode(String promoCode);
 
     List<PromoCode> findByPromoCodeIdClientePadrinho(Cliente clientePadrinho);
+
 }

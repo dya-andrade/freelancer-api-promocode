@@ -13,12 +13,12 @@ public class OpenApiConfig {
     public OpenAPI customOpenAPI() {
         return new OpenAPI()
             .info(new Info()
-                    .title("API PromoCode")
-                    .version("v1")
-                    .description("API para gerenciamento de PromoCodes.")
-                    .termsOfService("http://localhost:8080/termsOfService")
-                    .license(new License().name("Apache 2.0")
-                            .url("http://localhost:8080/license")));
+                .title("API PromoCode")
+                .version("v1")
+                .description("API para gerenciamento de PromoCodes.")
+                .termsOfService("http://localhost:8080/termsOfService")
+                .license(new License().name("Apache 2.0")
+                    .url("http://localhost:8080/license")));
     }
 
     //http://localhost:8080/v3/api-docs

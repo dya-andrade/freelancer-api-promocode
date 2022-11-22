@@ -21,6 +21,8 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
+import static br.com.api.exception.util.MessageException.PRODUTO_NAO_ENCONTRADO;
+
 @Log4j2
 @Service
 @Transactional
@@ -50,13 +52,19 @@ public class PromoCodeServiceImpl implements PromoCodeService {
     @Override
     public PromoCodeDTO criaPromoCode(final App app, final String idCliente, final String produtoId) {
 
+        log.info("SERVICE: CRIA PROMOCODE");
+
+        log.info("Busca produto, ID: " + produtoId);
+
         var buildProdutoId = ProdutoID.builder()
             .id(produtoId)
             .app(app)
             .build();
 
         var produto = produtoRepository.findById(buildProdutoId)
-            .orElseThrow(() -> new ResourceNotFoundException("Erro ao tentar buscar produto, ID não encontrado."));
+            .orElseThrow(() -> new ResourceNotFoundException(PRODUTO_NAO_ENCONTRADO));
+
+        log.info("Busca cliente.");
 
         var clientePadrinho = clienteService.buscaCliente(app, idCliente);
 
@@ -65,10 +73,15 @@ public class PromoCodeServiceImpl implements PromoCodeService {
             .produto(produto)
             .build();
 
+        log.info("Verifica se o promocode já existe.");
+
         var promoCodeOptional = promoCodeRepository.findById(buildPromoCodeId);
         PromoCode promoCode = null;
 
         if (promoCodeOptional.isEmpty()) {
+
+            log.info("Cria promocode.");
+
             promoCode = promoCodeRepository.save(
                 PromoCode.builder()
                     .promoCodeId(buildPromoCodeId)
@@ -79,6 +92,8 @@ public class PromoCodeServiceImpl implements PromoCodeService {
         } else {
             promoCode = promoCodeOptional.get();
         }
+
+        log.info("Consulta eventos de aplicação promocode.");
 
         return eventoPadrinhoRepository.consultaEventosPromoCode(promoCode)
             .orElse(PromoCodeDTO.builder()

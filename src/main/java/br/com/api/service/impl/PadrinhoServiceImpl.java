@@ -39,7 +39,14 @@ public class PadrinhoServiceImpl implements PadrinhoService {
 
     @Override
     public PadrinhoSaldoDTO consultaSaldo(final App app, final String idCliente) {
+
+        log.info("SERVICE: CONSULTA SALDO");
+
+        log.info("Busca cliente.");
+
         var clientePadrinho = clienteService.buscaCliente(app, idCliente);
+
+        log.info("Consutal saldo.");
 
         var saldoTotal = 0L;
 
@@ -55,12 +62,22 @@ public class PadrinhoServiceImpl implements PadrinhoService {
     public List<PromoCodeDTO> consultaDetalhada(final App app, final String idCliente, final String dataInicio, final String dataFim,
         final ClienteDTO clientePadrinhoDTO) {
 
+        log.info("SERVICE: CONSULTA DETALHADA");
+
+        log.info("Busca cliente.");
+
         var clientePadrinho = clienteService.validaClienteExistente(app, idCliente, clientePadrinhoDTO);
+
+        log.info("Busca promocodes.");
+
+        var promoCodesPadrinho = promoCodeRepository.findByPromoCodeIdClientePadrinho(clientePadrinho);
+
+        log.info("Converte as datas.");
 
         DateTimeFormatter formatter = new DateTimeFormatterBuilder().appendPattern("yyyy-MM-dd")
             .parseDefaulting(ChronoField.HOUR_OF_DAY, 0).toFormatter();
 
-        var promoCodesPadrinho = promoCodeRepository.findByPromoCodeIdClientePadrinho(clientePadrinho);
+        log.info("Consulta detalhada dos promocodes.");
 
         return promoCodesPadrinho.stream().map(promoCode -> eventoPadrinhoRepository
                 .consultaEventosPromoCodePadrinho(promoCode, LocalDateTime.parse(dataInicio, formatter), LocalDateTime.parse(dataFim, formatter))

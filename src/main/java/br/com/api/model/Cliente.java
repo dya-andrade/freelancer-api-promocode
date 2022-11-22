@@ -19,4 +19,5 @@ public class Cliente extends BaseEntity {
     private ClienteID clienteId;
     private String nome;
     private String email;
+
 }

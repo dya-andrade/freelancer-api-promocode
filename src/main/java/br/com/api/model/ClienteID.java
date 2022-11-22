@@ -25,4 +25,5 @@ public class ClienteID implements Serializable {
     private String id;
     @ManyToOne
     private App app;
+
 }

@@ -10,4 +10,5 @@ import lombok.NoArgsConstructor;
 public class AfiliadoSaldoDTO {
 
     private Integer moedas;
+
 }

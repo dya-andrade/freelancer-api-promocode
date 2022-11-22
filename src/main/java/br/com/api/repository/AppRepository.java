@@ -11,4 +11,5 @@ import java.util.UUID;
 public interface AppRepository extends JpaRepository<App, UUID> {
 
     Optional<App> findByUidAndToken(String uidApp, String token);
+
 }

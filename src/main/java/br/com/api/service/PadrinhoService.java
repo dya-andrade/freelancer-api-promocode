@@ -17,4 +17,5 @@ public interface PadrinhoService {
 
     List<PromoCodeDTO> consultaDetalhada(@NotNull App app, @NotBlank String idCliente, @NotBlank String dataInicio,
         @NotBlank String dataFim, @NotNull ClienteDTO clientePadrinhoDTO);
+
 }

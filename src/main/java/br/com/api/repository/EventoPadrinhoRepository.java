@@ -19,10 +19,10 @@ import java.util.Optional;
 public interface EventoPadrinhoRepository extends JpaRepository<EventoPadrinho, EventoPadrinhoID> {
 
     @Query(value = "SELECT COALESCE(SUM(ep.moeda), 0) + " +
-      "  COALESCE((SELECT SUM(em.moeda) FROM EventoManual em WHERE em.eventoManualId.cliente = :clientePadrinho), 0)" +
-      "  FROM PromoCode pc INNER JOIN EventoAfiliado ea ON pc = ea.eventoAfiliadoId.promoCode" +
-      "  INNER JOIN EventoPadrinho ep ON ea = ep.eventoPadrinhoId.eventoAfiliado" +
-      "  WHERE pc.promoCodeId.clientePadrinho = :clientePadrinho")
+        "  COALESCE((SELECT SUM(em.moeda) FROM EventoManual em WHERE em.eventoManualId.cliente = :clientePadrinho), 0)" +
+        "  FROM PromoCode pc INNER JOIN EventoAfiliado ea ON pc = ea.eventoAfiliadoId.promoCode" +
+        "  INNER JOIN EventoPadrinho ep ON ea = ep.eventoPadrinhoId.eventoAfiliado" +
+        "  WHERE pc.promoCodeId.clientePadrinho = :clientePadrinho")
     Long consultaSaldoPadrinho(Cliente clientePadrinho);
 
     @Query(value = "SELECT NEW " +
@@ -39,7 +39,7 @@ public interface EventoPadrinhoRepository extends JpaRepository<EventoPadrinho, 
         "  FROM EventoAfiliado ea INNER JOIN EventoPadrinho ep ON ea.eventoAfiliadoId = ep.eventoPadrinhoId.eventoAfiliado" +
         "  WHERE ea.eventoAfiliadoId.promoCode = :promoCode" +
         "  GROUP BY ea.eventoAfiliadoId.promoCode.promoCode")
-    Optional<PromoCodeDTO>  consultaEventosPromoCode(PromoCode promoCode);
+    Optional<PromoCodeDTO> consultaEventosPromoCode(PromoCode promoCode);
 
     Optional<EventoPadrinho> findByEventoPadrinhoIdUid(String uid);
 

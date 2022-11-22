@@ -19,4 +19,5 @@ public abstract class BaseEntity implements Serializable {
     private LocalDateTime dtCriacao;
     private LocalDateTime dtAlteracao;
     private LocalDateTime dtExclusao;
+
 }

@@ -27,4 +27,5 @@ public class PromoCode extends BaseEntity implements Serializable {
     private String promoCode;
     @Column(columnDefinition = "integer default -1")
     private Integer limiteAplicacoesAfiliados;
+
 }

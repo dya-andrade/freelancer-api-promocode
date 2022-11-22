@@ -13,7 +13,7 @@ import java.util.Date;
 
 @RestController
 @ControllerAdvice
-public class CustomizeResponseEntityExceptionHandler  extends ResponseEntityExceptionHandler {
+public class CustomizeResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public final ResponseEntity<ExceptionResponse> handleAllExceptions(Exception ex, WebRequest request) {
@@ -42,4 +42,5 @@ public class CustomizeResponseEntityExceptionHandler  extends ResponseEntityExce
             request.getDescription(false));
         return new ResponseEntity<>(exceptionResponse, HttpStatus.CONFLICT);
     }
+
 }

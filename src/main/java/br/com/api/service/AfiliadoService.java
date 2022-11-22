@@ -11,6 +11,7 @@ import javax.validation.constraints.NotNull;
 @Validated
 public interface AfiliadoService {
 
-    AfiliadoSaldoDTO aplicaPromoCode(@NotNull App app, @NotBlank String idCliente, @NotBlank String promocode, @NotNull ClienteDTO clienteAfiliadoDTO);
+    AfiliadoSaldoDTO aplicaPromoCode(@NotNull App app, @NotBlank String idCliente, @NotBlank String promocode,
+        @NotNull ClienteDTO clienteAfiliadoDTO);
 
 }

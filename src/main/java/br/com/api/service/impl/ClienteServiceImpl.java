@@ -15,6 +15,8 @@ import org.springframework.validation.annotation.Validated;
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 
+import static br.com.api.exception.util.MessageException.CLIENTE_NAO_ENCONTRADO;
+
 @Log4j2
 @Service
 @Transactional
@@ -32,6 +34,8 @@ public class ClienteServiceImpl implements ClienteService {
 
     @Override
     public Cliente validaClienteExistente(final App app, final String idCliente, final ClienteDTO clienteDTO) {
+        log.info("Verifica se cliente existe e cria um novo, ID: " + idCliente);
+
         var cliente = clienteRepository.findById(buildClienteID(app, idCliente));
 
         if (cliente.isEmpty())
@@ -47,8 +51,11 @@ public class ClienteServiceImpl implements ClienteService {
     }
 
     @Override
-    public Cliente buscaCliente(final App app, final String idCliente){
+    public Cliente buscaCliente(final App app, final String idCliente) {
+        log.info("Buscando cliente, ID: " + idCliente);
+
         return clienteRepository.findById(buildClienteID(app, idCliente))
-            .orElseThrow(() -> new ResourceNotFoundException("Erro ao tentar buscar cliente, ID não encontrado."));
+            .orElseThrow(() -> new ResourceNotFoundException(CLIENTE_NAO_ENCONTRADO));
     }
+
 }

@@ -11,4 +11,5 @@ public class InvalidAuthenticationException extends RuntimeException {
     public InvalidAuthenticationException(String ex) {
         super(ex);
     }
+
 }
