@@ -20,6 +20,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import static br.com.api.exception.util.MessageException.PROMOCODE_APLICACAO_PADRINHO;
+import static br.com.api.exception.util.MessageException.PROMOCODE_EXPIRADO;
+import static br.com.api.exception.util.MessageException.PROMOCODE_JA_APLICADO;
 import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -37,8 +40,8 @@ public class AfiliadoControllerTest extends AbstractIntegrationTest {
         objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
     }
 
-    private static RequestSpecification specification(){
-         return new RequestSpecBuilder()
+    private static RequestSpecification specification() {
+        return new RequestSpecBuilder()
             .addHeader(MockObject.HEADER_PARAM_AUTHORIZATION, MockObject.TOKEN)
             .setBasePath("/{uidApp}/afiliado/{idCliente}/aplicar/{promocode}")
             .setPort(MockObject.SERVER_PORT)
@@ -50,7 +53,7 @@ public class AfiliadoControllerTest extends AbstractIntegrationTest {
     @Test
     @Order(1)
     @DisplayName("Retorna moedas aplicação")
-    public void aplicaPromoCodeAfiliadoComSucessoRetornaMoedas() throws JsonProcessingException {
+    void aplicaPromoCodeAfiliadoComSucessoRetornaMoedas() throws JsonProcessingException {
 
         var content =
             given()
@@ -77,7 +80,7 @@ public class AfiliadoControllerTest extends AbstractIntegrationTest {
     @Test
     @Order(2)
     @DisplayName("Promocode já aplicado")
-    public void aplicaPromoCodeAfiliadoComPromoCodeJaAplicado() throws JsonProcessingException {
+    void aplicaPromoCodeAfiliadoComPromoCodeJaAplicado() throws JsonProcessingException {
 
         var content =
             given()
@@ -98,13 +101,13 @@ public class AfiliadoControllerTest extends AbstractIntegrationTest {
 
         assertNotNull(exceptionResponse);
 
-        assertEquals(exceptionResponse.getMessage(), "Erro ao tentar aplicar promocode, promocode já foi aplicado.");
+        assertEquals(exceptionResponse.getMessage(), PROMOCODE_JA_APLICADO);
     }
 
     @Test
     @Order(3)
     @DisplayName("Afiliado é padrinho do promocode")
-    public void aplicaPromoCodeAfiliadoComPadrinhoComoAfiliado() throws JsonProcessingException {
+    void aplicaPromoCodeAfiliadoComPadrinhoComoAfiliado() throws JsonProcessingException {
 
         var content =
             given()
@@ -125,13 +128,13 @@ public class AfiliadoControllerTest extends AbstractIntegrationTest {
 
         assertNotNull(exceptionResponse);
 
-        assertEquals(exceptionResponse.getMessage(), "Erro ao tentar aplicar promocode, cliente é padrinho do promocode.");
+        assertEquals(exceptionResponse.getMessage(), PROMOCODE_APLICACAO_PADRINHO);
     }
 
     @Test
     @Order(4)
     @DisplayName("Promocode está expirado")
-    public void aplicaPromoCodeAfiliadoComPromoCodeExpirado() throws JsonProcessingException {
+    void aplicaPromoCodeAfiliadoComPromoCodeExpirado() throws JsonProcessingException {
 
         var content =
             given()
@@ -152,6 +155,7 @@ public class AfiliadoControllerTest extends AbstractIntegrationTest {
 
         assertNotNull(exceptionResponse);
 
-        assertEquals(exceptionResponse.getMessage(), "Erro ao tentar aplicar promocode, promocode está expirado.");
+        assertEquals(exceptionResponse.getMessage(), PROMOCODE_EXPIRADO);
     }
+
 }

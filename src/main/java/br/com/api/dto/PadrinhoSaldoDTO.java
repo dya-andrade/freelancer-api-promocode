@@ -10,4 +10,5 @@ import lombok.NoArgsConstructor;
 public class PadrinhoSaldoDTO {
 
     private Long saldoAtual;
+
 }

@@ -12,9 +12,10 @@ import javax.validation.constraints.NotBlank;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ClienteDTO {
-    
+
     @NotBlank
     private String nome;
     @NotBlank
     private String email;
+
 }

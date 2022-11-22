@@ -1,6 +1,7 @@
 package br.com.api.util;
 
 import br.com.api.dto.ClienteDTO;
+import br.com.api.dto.EventoManualDTO;
 import br.com.api.model.App;
 import br.com.api.model.Cliente;
 import br.com.api.model.ClienteID;
@@ -17,6 +18,7 @@ import br.com.api.model.PromoCodeID;
 
 import java.time.LocalDateTime;
 
+import static br.com.api.model.TipoEventoManual.ADD;
 import static br.com.api.model.TipoEventoManual.RET;
 
 public class MockObject {
@@ -35,35 +37,35 @@ public class MockObject {
 
     public static final String CONTENT_TYPE_JSON = "application/json";
 
-    public static ClienteDTO clienteAfiliadoDTO(){
+    public static ClienteDTO clienteAfiliadoDTO() {
         return ClienteDTO.builder()
             .nome(clienteAfiliado().getNome())
             .email(clienteAfiliado().getEmail())
             .build();
     }
 
-    public static ClienteDTO clienteAfiliadoDTO2(){
+    public static ClienteDTO clienteAfiliadoDTO2() {
         return ClienteDTO.builder()
             .nome(clienteAfiliado2().getNome())
             .email(clienteAfiliado2().getEmail())
             .build();
     }
 
-    public static ClienteDTO clientePadrinhoDTO(){
+    public static ClienteDTO clientePadrinhoDTO() {
         return ClienteDTO.builder()
             .nome(clientePadrinho().getNome())
             .email(clientePadrinho().getEmail())
             .build();
     }
 
-    public static PromoCodeID promoCodeID(){
+    public static PromoCodeID promoCodeID() {
         return PromoCodeID.builder()
             .produto(produto())
             .clientePadrinho(clientePadrinho())
             .build();
     }
 
-    public static PromoCode promoCode(){
+    public static PromoCode promoCode() {
         return PromoCode.builder()
             .promoCodeId(promoCodeID())
             .promoCode("AQDC3BO")
@@ -74,18 +76,18 @@ public class MockObject {
             .build();
     }
 
-    public static ProdutoID produtoID(){
+    public static ProdutoID produtoID() {
         return ProdutoID.builder()
             .id("ff0c-4581-97c7")
             .app(app())
             .build();
     }
 
-    public static Produto produto(){
+    public static Produto produto() {
         return Produto.builder()
             .produtoId(produtoID())
             .nome("Black Friday")
-            .limiteAplicacoesAfiliados(15)
+            .limiteAplicacoesAfiliados(1)
             .limiteAplicacaoBonusPadrinho(3)
             .moedaPadrinho(2)
             .moedaAfiliado(20)
@@ -94,7 +96,7 @@ public class MockObject {
             .build();
     }
 
-    public static App app(){
+    public static App app() {
         return App.builder()
             .uid("26ed47e2-281eeab5e652")
             .nome("Tua Agenda")
@@ -103,14 +105,14 @@ public class MockObject {
             .build();
     }
 
-    public static ClienteID clientePadrinhoID(){
+    public static ClienteID clientePadrinhoID() {
         return ClienteID.builder()
             .id("4581-97c7")
             .app(app())
             .build();
     }
 
-    public static Cliente clientePadrinho(){
+    public static Cliente clientePadrinho() {
         return Cliente.builder()
             .clienteId(clientePadrinhoID())
             .nome("Maria")
@@ -119,21 +121,21 @@ public class MockObject {
             .build();
     }
 
-    public static ClienteID clienteAfiliadoID(){
+    public static ClienteID clienteAfiliadoID() {
         return ClienteID.builder()
             .id("ff0c-4581")
             .app(app())
             .build();
     }
 
-    public static ClienteID clienteAfiliadoID2(){
+    public static ClienteID clienteAfiliadoID2() {
         return ClienteID.builder()
             .id("ff1c-5842")
             .app(app())
             .build();
     }
 
-    public static Cliente clienteAfiliado(){
+    public static Cliente clienteAfiliado() {
         return Cliente.builder()
             .clienteId(clienteAfiliadoID())
             .nome("Joana")
@@ -142,7 +144,7 @@ public class MockObject {
             .build();
     }
 
-    public static Cliente clienteAfiliado2(){
+    public static Cliente clienteAfiliado2() {
         return Cliente.builder()
             .clienteId(clienteAfiliadoID2())
             .nome("Matheus")
@@ -151,14 +153,14 @@ public class MockObject {
             .build();
     }
 
-    public static EventoAfiliadoID eventoAfiliadoID(){
+    public static EventoAfiliadoID eventoAfiliadoID() {
         return EventoAfiliadoID.builder()
             .promoCode(promoCode())
             .clienteAfiliado(clienteAfiliado())
             .build();
     }
 
-    public static EventoAfiliado eventoAfiliado(){
+    public static EventoAfiliado eventoAfiliado() {
         return EventoAfiliado.builder()
             .eventoAfiliadoId(eventoAfiliadoID())
             .moeda(eventoAfiliadoID().getPromoCode().getPromoCodeId()
@@ -167,14 +169,14 @@ public class MockObject {
             .build();
     }
 
-    public static EventoPadrinhoID eventoPadrinhoID(){
+    public static EventoPadrinhoID eventoPadrinhoID() {
         return EventoPadrinhoID.builder()
             .uid("4299-ab0c")
             .eventoAfiliado(eventoAfiliado())
             .build();
     }
 
-    public static EventoPadrinho eventoPadrinho(){
+    public static EventoPadrinho eventoPadrinho() {
         return EventoPadrinho.builder()
             .eventoPadrinhoId(eventoPadrinhoID())
             .moeda(eventoPadrinhoID().getEventoAfiliado().getEventoAfiliadoId()
@@ -183,21 +185,58 @@ public class MockObject {
             .build();
     }
 
-    public static EventoManualID eventoManualID(){
+    public static EventoManualID eventoManualIDADD() {
         return EventoManualID.builder()
             .uid("418e-8c65")
             .cliente(clientePadrinho())
             .build();
     }
 
-    public static EventoManual eventoManual(){
+    public static EventoManual eventoManualADD() {
         return EventoManual.builder()
-            .eventoManualId(eventoManualID())
-            .moeda(-1)
-            .motivo("Para ser aplicado em assinatura")
-            .tipo(RET)
-            .idReferencia("")
+            .eventoManualId(eventoManualIDADD())
+            .moeda(10)
+            .motivo("Adiciona saldo para assinatura")
+            .tipo(ADD)
+            .idReferencia("8c65")
             .dtCriacao(LocalDateTime.now())
             .build();
     }
+
+    public static EventoManualDTO eventoManualDTOADD() {
+        return EventoManualDTO.builder()
+            .motivo(eventoManualADD().getMotivo())
+            .tipo(eventoManualADD().getTipo())
+            .moeda(eventoManualADD().getMoeda())
+            .idReferencia(eventoManualADD().getIdReferencia())
+            .build();
+    }
+
+    public static EventoManualID eventoManualIDRET() {
+        return EventoManualID.builder()
+            .uid("4147e-85261")
+            .cliente(clienteAfiliado())
+            .build();
+    }
+
+    public static EventoManual eventoManualRET() {
+        return EventoManual.builder()
+            .eventoManualId(eventoManualIDRET())
+            .moeda(-25)
+            .motivo("Adiciona saldo para assinatura")
+            .tipo(RET)
+            .idReferencia("8485")
+            .dtCriacao(LocalDateTime.now())
+            .build();
+    }
+
+    public static EventoManualDTO eventoManualDTORET() {
+        return EventoManualDTO.builder()
+            .motivo(eventoManualRET().getMotivo())
+            .tipo(eventoManualRET().getTipo())
+            .moeda(eventoManualRET().getMoeda())
+            .idReferencia(eventoManualRET().getIdReferencia())
+            .build();
+    }
+
 }
