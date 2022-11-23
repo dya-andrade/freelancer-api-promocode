@@ -222,7 +222,7 @@ public class MockObject {
     public static EventoManual eventoManualRET() {
         return EventoManual.builder()
             .eventoManualId(eventoManualIDRET())
-            .moeda(-25)
+            .moeda(-45)
             .motivo("Adiciona saldo para assinatura")
             .tipo(RET)
             .idReferencia("8485")

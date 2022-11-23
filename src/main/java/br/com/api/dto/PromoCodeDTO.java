@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 public class PromoCodeDTO {
 
     private String code;
+    private String produto;
     private Long qtdAfiliados;
     private Long qtdAtivacoes;
     private Long moedas;

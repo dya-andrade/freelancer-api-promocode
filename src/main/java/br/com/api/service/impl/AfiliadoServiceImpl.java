@@ -109,19 +109,8 @@ public class AfiliadoServiceImpl implements AfiliadoService {
                     .dtCriacao(LocalDateTime.now())
                     .build());
 
-            log.info("Cria evento padrinho.");
-
-            eventoPadrinhoRepository.save(
-                EventoPadrinho.builder()
-                    .eventoPadrinhoId(EventoPadrinhoID.builder()
-                        .uid(geraUIDEventoPadrinho())
-                        .eventoAfiliado(eventoAfiliado)
-                        .build())
-                    .moeda(produto.getMoedaPadrinho())
-                    .dtCriacao(LocalDateTime.now())
-                    .build());
-
             return new AfiliadoSaldoDTO(produto.getMoedaAfiliado());
+
         } else {
             throw new ResourceConflictException(PROMOCODE_EXPIRADO);
         }

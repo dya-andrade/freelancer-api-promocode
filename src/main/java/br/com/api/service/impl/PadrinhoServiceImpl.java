@@ -83,6 +83,8 @@ public class PadrinhoServiceImpl implements PadrinhoService {
                 .consultaEventosPromoCodePadrinho(promoCode, LocalDateTime.parse(dataInicio, formatter), LocalDateTime.parse(dataFim, formatter))
                 .orElse(PromoCodeDTO.builder()
                     .code(promoCode.getPromoCode())
+                    .produto(promoCode.getPromoCodeId()
+                        .getProduto().getNome())
                     .qtdAfiliados(0L)
                     .qtdAtivacoes(0L)
                     .moedas(0L)

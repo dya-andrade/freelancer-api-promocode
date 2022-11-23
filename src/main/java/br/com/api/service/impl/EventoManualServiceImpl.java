@@ -54,9 +54,9 @@ public class EventoManualServiceImpl implements EventoManualService {
         }
 
         if (isNull(eventoManual)) {
-            
+
             log.info("Cria evento manual.");
-            
+
             eventoManualRepository.save(
                 EventoManual.builder()
                     .eventoManualId(EventoManualID.builder()
@@ -100,12 +100,17 @@ public class EventoManualServiceImpl implements EventoManualService {
         log.info("Verifica o tipo de evento manual.");
 
         if (eventoManualDTO.getTipo().equals(RET)) {
+
             var saldoPadrinho = padrinhoService.consultaSaldo(app, idCliente).getSaldoAtual();
 
             log.info("Verifica se o saldo é suficiente.");
 
-            if (saldoPadrinho >= Math.abs(eventoManualDTO.getMoeda())) {
-                eventoManualDTO.setMoeda(eventoManualDTO.getMoeda() * -1);
+            var converteMoedaParaPositivo = Math.abs(eventoManualDTO.getMoeda());
+
+            if (saldoPadrinho >= converteMoedaParaPositivo) {
+
+                eventoManualDTO.setMoeda(converteMoedaParaPositivo * -1);
+
                 return validaEventoManualDuplicidade(cliente, eventoManualDTO);
             }
 

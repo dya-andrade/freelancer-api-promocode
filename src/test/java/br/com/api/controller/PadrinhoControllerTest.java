@@ -139,6 +139,7 @@ public class PadrinhoControllerTest extends AbstractIntegrationTest {
         promoCodeDTO = promoCodesDTO.get(0);
 
         assertEquals(promoCodeDTO.getCode(), PROMO_CODE);
+        assertEquals(promoCodeDTO.getProduto(), MockObject.produto().getNome());
         assertTrue(promoCodeDTO.getQtdAfiliados() >= 0);
         assertTrue(promoCodeDTO.getQtdAtivacoes() >= 0);
         assertTrue(promoCodeDTO.getMoedas() >= 0);
@@ -219,6 +220,7 @@ public class PadrinhoControllerTest extends AbstractIntegrationTest {
 
         assertNotNull(promoCodeDTO);
         assertEquals(promoCodeDTO.getCode(), PROMO_CODE);
+        assertEquals(promoCodeDTO.getProduto(), MockObject.produto().getNome());
         assertTrue(promoCodeDTO.getQtdAfiliados() >= 0);
         assertTrue(promoCodeDTO.getQtdAtivacoes() >= 0);
         assertTrue(promoCodeDTO.getMoedas() >= 0);
@@ -247,6 +249,7 @@ public class PadrinhoControllerTest extends AbstractIntegrationTest {
 
         assertNotNull(promoCodeDTO);
         assertTrue(!promoCodeDTO.getCode().isBlank());
+        assertEquals(promoCodeDTO.getProduto(), MockObject.produto().getNome());
         assertTrue(promoCodeDTO.getQtdAfiliados() >= 0);
         assertTrue(promoCodeDTO.getQtdAtivacoes() >= 0);
         assertTrue(promoCodeDTO.getMoedas() >= 0);
@@ -335,7 +338,7 @@ public class PadrinhoControllerTest extends AbstractIntegrationTest {
 
         assertNotNull(padrinhoSaldoDTO);
 
-        assertEquals(padrinhoSaldoDTO.getSaldoAtual().intValue(), promoCodeDTO.getMoedas());
+        assertTrue(padrinhoSaldoDTO.getSaldoAtual().intValue() >= MockObject.produto().getMoedaAfiliado());
     }
 
 }

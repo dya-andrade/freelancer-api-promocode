@@ -98,6 +98,8 @@ public class PromoCodeServiceImpl implements PromoCodeService {
         return eventoPadrinhoRepository.consultaEventosPromoCode(promoCode)
             .orElse(PromoCodeDTO.builder()
                 .code(promoCode.getPromoCode())
+                .produto(promoCode.getPromoCodeId()
+                    .getProduto().getNome())
                 .qtdAfiliados(0L)
                 .qtdAtivacoes(0L)
                 .moedas(0L)
