@@ -46,7 +46,7 @@ public class PadrinhoServiceImpl implements PadrinhoService {
 
         var clientePadrinho = clienteService.buscaCliente(app, idCliente);
 
-        log.info("Consutal saldo.");
+        log.info("Consulta saldo.");
 
         var saldoTotal = 0L;
 
