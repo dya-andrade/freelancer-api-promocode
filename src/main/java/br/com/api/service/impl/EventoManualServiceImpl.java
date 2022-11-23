@@ -55,7 +55,7 @@ public class EventoManualServiceImpl implements EventoManualService {
 
         if (isNull(eventoManual)) {
             
-            log.info("Verifica duplicidade evento manual.");
+            log.info("Cria evento manual.");
             
             eventoManualRepository.save(
                 EventoManual.builder()
