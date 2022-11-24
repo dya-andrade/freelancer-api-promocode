@@ -8,18 +8,20 @@ import lombok.experimental.SuperBuilder;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import java.io.Serializable;
 
 @Data
 @Entity
 @SuperBuilder
 @NoArgsConstructor
-@Table(name = "cliente")
+@Table(name = "evento_padrinho")
 @EqualsAndHashCode(callSuper = true)
-public class Cliente extends BaseEntity {
+public class EventoPadrinho extends BaseEntity implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     @EmbeddedId
-    private ClienteID clienteId;
-    private String nome;
-    private String email;
+    private EventoPadrinhoID eventoPadrinhoId;
+    private Integer moeda;
 
 }

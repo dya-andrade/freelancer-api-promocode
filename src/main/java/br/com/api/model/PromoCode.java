@@ -15,21 +15,17 @@ import java.io.Serializable;
 @Entity
 @SuperBuilder
 @NoArgsConstructor
-@Table(name = "produto")
+@Table(name = "promo_code")
 @EqualsAndHashCode(callSuper = true)
-public class Produto extends BaseEntity implements Serializable {
+public class PromoCode extends BaseEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @EmbeddedId
-    private ProdutoID produtoId;
-    private String nome;
+    private PromoCodeID promoCodeId;
+    @Column(unique = true)
+    private String promoCode;
     @Column(columnDefinition = "integer default -1")
     private Integer limiteAplicacoesAfiliados;
-    private Integer moedaAfiliado;
-    private Integer moedaPadrinho;
-    @Column(columnDefinition = "integer default 3")
-    private Integer limiteAplicacaoBonusPadrinho;
-    private String postWebhockPadrinho;
 
 }
