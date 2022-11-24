@@ -16,12 +16,7 @@ import io.restassured.filter.log.LogDetail;
 import io.restassured.filter.log.RequestLoggingFilter;
 import io.restassured.filter.log.ResponseLoggingFilter;
 import io.restassured.specification.RequestSpecification;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.*;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
@@ -30,10 +25,7 @@ import static br.com.api.exception.util.MessageException.EVENTO_SALDO_INSUFICIEN
 import static br.com.api.util.MockObject.PROMO_CODE;
 import static br.com.api.util.MockObject.eventoManualADD;
 import static io.restassured.RestAssured.given;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
@@ -88,7 +80,7 @@ public class PadrinhoControllerTest extends AbstractIntegrationTest {
     @Test
     @Order(2)
     @DisplayName("Cria evento manual de ADD duplicado")
-    void criaEventoManualDuplicadoComRetornaFalse() throws JsonProcessingException {
+    void criaEventoManualDuplicadoERetornaFalse() throws JsonProcessingException {
 
         var content =
             given()

@@ -1,10 +1,6 @@
 package br.com.api.controller.api;
 
-import br.com.api.dto.ClienteDTO;
-import br.com.api.dto.EventoManualDTO;
-import br.com.api.dto.PadrinhoSaldoDTO;
-import br.com.api.dto.PromoCodeDTO;
-import br.com.api.dto.RetornoDTO;
+import br.com.api.dto.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;

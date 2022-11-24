@@ -10,11 +10,8 @@ import br.com.api.service.PadrinhoService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.annotation.Validated;
 
 import javax.transaction.Transactional;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
@@ -80,7 +77,7 @@ public class PadrinhoServiceImpl implements PadrinhoService {
         log.info("Consulta detalhada dos promocodes.");
 
         return promoCodesPadrinho.stream().map(promoCode -> eventoPadrinhoRepository
-                .consultaEventosPromoCodePadrinho(promoCode, LocalDateTime.parse(dataInicio, formatter), LocalDateTime.parse(dataFim, formatter))
+                .consultaEventosPromoCode(promoCode, LocalDateTime.parse(dataInicio, formatter), LocalDateTime.parse(dataFim, formatter))
                 .orElse(PromoCodeDTO.builder()
                     .code(promoCode.getPromoCode())
                     .produto(promoCode.getPromoCodeId()

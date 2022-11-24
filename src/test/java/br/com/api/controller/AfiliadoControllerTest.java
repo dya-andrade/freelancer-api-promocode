@@ -2,6 +2,7 @@ package br.com.api.controller;
 
 import br.com.api.AbstractIntegrationTest;
 import br.com.api.dto.AfiliadoSaldoDTO;
+import br.com.api.dto.RetornoDTO;
 import br.com.api.exception.model.ExceptionResponse;
 import br.com.api.util.MockObject;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -12,20 +13,12 @@ import io.restassured.filter.log.LogDetail;
 import io.restassured.filter.log.RequestLoggingFilter;
 import io.restassured.filter.log.ResponseLoggingFilter;
 import io.restassured.specification.RequestSpecification;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.*;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import static br.com.api.exception.util.MessageException.PROMOCODE_APLICACAO_PADRINHO;
-import static br.com.api.exception.util.MessageException.PROMOCODE_EXPIRADO;
-import static br.com.api.exception.util.MessageException.PROMOCODE_JA_APLICADO;
+import static br.com.api.exception.util.MessageException.*;
 import static io.restassured.RestAssured.given;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
@@ -40,10 +33,10 @@ public class AfiliadoControllerTest extends AbstractIntegrationTest {
         objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
     }
 
-    private static RequestSpecification specification() {
+    private static RequestSpecification specification(String url) {
         return new RequestSpecBuilder()
             .addHeader(MockObject.HEADER_PARAM_AUTHORIZATION, MockObject.TOKEN)
-            .setBasePath("/{uidApp}/afiliado/{idCliente}/aplicar/{promocode}")
+            .setBasePath("/{uidApp}/afiliado/{idCliente}" + url)
             .setPort(MockObject.SERVER_PORT)
             .addFilter(new RequestLoggingFilter(LogDetail.ALL))
             .addFilter(new ResponseLoggingFilter(LogDetail.ALL))
@@ -57,7 +50,7 @@ public class AfiliadoControllerTest extends AbstractIntegrationTest {
 
         var content =
             given()
-                .spec(specification())
+                .spec(specification("/aplicar/{promocode}"))
                 .contentType(MockObject.CONTENT_TYPE_JSON)
                 .pathParam("uidApp", MockObject.app().getUid())
                 .pathParam("idCliente", MockObject.clienteAfiliado().getClienteId().getId())
@@ -84,7 +77,7 @@ public class AfiliadoControllerTest extends AbstractIntegrationTest {
 
         var content =
             given()
-                .spec(specification())
+                .spec(specification("/aplicar/{promocode}"))
                 .contentType(MockObject.CONTENT_TYPE_JSON)
                 .pathParam("uidApp", MockObject.app().getUid())
                 .pathParam("idCliente", MockObject.clienteAfiliado().getClienteId().getId())
@@ -111,7 +104,7 @@ public class AfiliadoControllerTest extends AbstractIntegrationTest {
 
         var content =
             given()
-                .spec(specification())
+                .spec(specification("/aplicar/{promocode}"))
                 .contentType(MockObject.CONTENT_TYPE_JSON)
                 .pathParam("uidApp", MockObject.app().getUid())
                 .pathParam("idCliente", MockObject.clientePadrinho().getClienteId().getId())
@@ -138,7 +131,7 @@ public class AfiliadoControllerTest extends AbstractIntegrationTest {
 
         var content =
             given()
-                .spec(specification())
+                .spec(specification("/aplicar/{promocode}"))
                 .contentType(MockObject.CONTENT_TYPE_JSON)
                 .pathParam("uidApp", MockObject.app().getUid())
                 .pathParam("idCliente", MockObject.clienteAfiliado2().getClienteId().getId())
@@ -156,6 +149,58 @@ public class AfiliadoControllerTest extends AbstractIntegrationTest {
         assertNotNull(exceptionResponse);
 
         assertEquals(exceptionResponse.getMessage(), PROMOCODE_EXPIRADO);
+    }
+
+    @Test
+    @Order(5)
+    @DisplayName("Aplica evento padrinho")
+    void aplicaPadrinhoComSucessoRetornaOk() throws JsonProcessingException {
+
+        var content =
+                given()
+                        .spec(specification("/aplicarPadrinho/{idReferencia}"))
+                        .contentType(MockObject.CONTENT_TYPE_JSON)
+                        .pathParam("uidApp", MockObject.app().getUid())
+                        .pathParam("idCliente", MockObject.clienteAfiliado().getClienteId().getId())
+                        .pathParam("idReferencia", MockObject.eventoPadrinho().getIdReferencia())
+                        .when()
+                        .post()
+                        .then()
+                        .statusCode(200)
+                        .extract()
+                        .body().asString();
+
+        var retornoDTO = objectMapper.readValue(content, RetornoDTO.class);
+
+        assertNotNull(retornoDTO);
+
+        assertTrue(retornoDTO.getOk());
+    }
+
+    @Test
+    @Order(6)
+    @DisplayName("Aplica evento padrinho duplicado")
+    void aplicaPadrinhoDuplicadoERetornaFalse() throws JsonProcessingException {
+
+        var content =
+                given()
+                        .spec(specification("/aplicarPadrinho/{idReferencia}"))
+                        .contentType(MockObject.CONTENT_TYPE_JSON)
+                        .pathParam("uidApp", MockObject.app().getUid())
+                        .pathParam("idCliente", MockObject.clienteAfiliado().getClienteId().getId())
+                        .pathParam("idReferencia", MockObject.eventoPadrinho().getIdReferencia())
+                        .when()
+                        .post()
+                        .then()
+                        .statusCode(200)
+                        .extract()
+                        .body().asString();
+
+        var retornoDTO = objectMapper.readValue(content, RetornoDTO.class);
+
+        assertNotNull(retornoDTO);
+
+        assertFalse(retornoDTO.getOk());
     }
 
 }

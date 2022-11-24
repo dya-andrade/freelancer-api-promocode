@@ -3,17 +3,12 @@ package br.com.api.controller;
 import br.com.api.controller.api.AfiliadoApi;
 import br.com.api.dto.AfiliadoSaldoDTO;
 import br.com.api.dto.ClienteDTO;
+import br.com.api.dto.RetornoDTO;
 import br.com.api.service.AfiliadoService;
 import br.com.api.service.AppService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -25,7 +20,6 @@ public class AfiliadoController implements AfiliadoApi {
     private final AppService appService;
 
     private final AfiliadoService afiliadoService;
-
 
     @Override
     @ResponseStatus(HttpStatus.OK)
@@ -40,4 +34,15 @@ public class AfiliadoController implements AfiliadoApi {
         return afiliadoService.aplicaPromoCode(app, idCliente, promocode, clienteAfiliadoDTO);
     }
 
+    @Override
+    @ResponseStatus(HttpStatus.OK)
+    @PostMapping("/{idCliente}/aplicarPadrinho/{idReferencia}")
+    public RetornoDTO aplicaPadrinho(
+            @RequestHeader(name = "token") String token, @PathVariable(value = "uidApp") String uidApp,
+            @PathVariable(value = "idCliente") String idCliente, @PathVariable(value = "idReferencia") String idReferencia) {
+
+        var app = appService.autenticaApp(uidApp, token);
+
+        return afiliadoService.aplicaPadrinho(app, idCliente, idReferencia);
+    }
 }

@@ -2,19 +2,7 @@ package br.com.api.util;
 
 import br.com.api.dto.ClienteDTO;
 import br.com.api.dto.EventoManualDTO;
-import br.com.api.model.App;
-import br.com.api.model.Cliente;
-import br.com.api.model.ClienteID;
-import br.com.api.model.EventoAfiliado;
-import br.com.api.model.EventoAfiliadoID;
-import br.com.api.model.EventoManual;
-import br.com.api.model.EventoManualID;
-import br.com.api.model.EventoPadrinho;
-import br.com.api.model.EventoPadrinhoID;
-import br.com.api.model.Produto;
-import br.com.api.model.ProdutoID;
-import br.com.api.model.PromoCode;
-import br.com.api.model.PromoCodeID;
+import br.com.api.model.*;
 
 import java.time.LocalDateTime;
 
@@ -181,6 +169,7 @@ public class MockObject {
             .eventoPadrinhoId(eventoPadrinhoID())
             .moeda(eventoPadrinhoID().getEventoAfiliado().getEventoAfiliadoId()
                 .getPromoCode().getPromoCodeId().getProduto().getMoedaPadrinho())
+                .idReferencia("485-333")
             .dtCriacao(LocalDateTime.now())
             .build();
     }

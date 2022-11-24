@@ -1,17 +1,12 @@
 package br.com.api.repository;
 
 import br.com.api.dto.PromoCodeDTO;
-import br.com.api.model.Cliente;
-
-import br.com.api.model.EventoPadrinho;
-import br.com.api.model.EventoPadrinhoID;
-import br.com.api.model.PromoCode;
+import br.com.api.model.*;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
-
 import java.util.Optional;
 
 
@@ -32,7 +27,7 @@ public interface EventoPadrinhoRepository extends JpaRepository<EventoPadrinho, 
         "  INNER JOIN EventoPadrinho ep ON ea = ep.eventoPadrinhoId.eventoAfiliado" +
         "  AND ea.dtCriacao BETWEEN :dataInicio AND :dataFim AND ep.dtCriacao BETWEEN :dataInicio AND :dataFim" +
         "  WHERE pc = :promoCode GROUP BY pc.promoCode, pc.promoCodeId.produto.nome")
-    Optional<PromoCodeDTO> consultaEventosPromoCodePadrinho(PromoCode promoCode, LocalDateTime dataInicio, LocalDateTime dataFim);
+    Optional<PromoCodeDTO> consultaEventosPromoCode(PromoCode promoCode, LocalDateTime dataInicio, LocalDateTime dataFim);
 
     @Query(value = "SELECT NEW " +
         "  br.com.api.dto.PromoCodeDTO(ea.eventoAfiliadoId.promoCode.promoCode, ea.eventoAfiliadoId.promoCode.promoCodeId.produto.nome, " +
@@ -43,5 +38,13 @@ public interface EventoPadrinhoRepository extends JpaRepository<EventoPadrinho, 
     Optional<PromoCodeDTO> consultaEventosPromoCode(PromoCode promoCode);
 
     Optional<EventoPadrinho> findByEventoPadrinhoIdUid(String uid);
+
+    Optional<EventoPadrinho> findByEventoPadrinhoIdEventoAfiliadoAndIdReferencia(EventoAfiliado eventoAfiliado, String idReferencia);
+
+    @Query(value = "SELECT COUNT(ep)" +
+            "  FROM EventoPadrinho ep INNER JOIN PromoCode pc " +
+            "  ON ep.eventoPadrinhoId.eventoAfiliado.eventoAfiliadoId.promoCode = pc" +
+            "  WHERE pc = :promoCode")
+    Long consultaQtdAplicacoesPromoCode(PromoCode promoCode);
 
 }

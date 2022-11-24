@@ -23,5 +23,6 @@ public class EventoPadrinho extends BaseEntity implements Serializable {
     @EmbeddedId
     private EventoPadrinhoID eventoPadrinhoId;
     private Integer moeda;
+    private String idReferencia;
 
 }
