@@ -17,7 +17,7 @@ import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-import static br.com.api.exception.util.MessageException.EVENTO_SALDO_INSUFICIENTE;
+import static br.com.api.exception.util.MessageError.EVENTO_SALDO_INSUFICIENTE;
 import static br.com.api.model.TipoEventoManual.RET;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
@@ -34,9 +34,9 @@ public class EventoManualServiceImpl implements EventoManualService {
 
     private static RetornoDTO buildRetornoDTO(Boolean ok) {
         return RetornoDTO.
-            builder()
-            .ok(ok)
-            .build();
+                builder()
+                .ok(ok)
+                .build();
     }
 
     private RetornoDTO validaEventoManualDuplicidade(final Cliente cliente, final EventoManualDTO eventoManualDTO) {
@@ -47,7 +47,7 @@ public class EventoManualServiceImpl implements EventoManualService {
 
         if (nonNull(eventoManualDTO.getIdReferencia()) && !eventoManualDTO.getIdReferencia().isBlank()) {
             eventoManual = eventoManualRepository
-                .findByEventoManualIdClienteAndIdReferencia(cliente, eventoManualDTO.getIdReferencia());
+                    .findByEventoManualIdClienteAndIdReferencia(cliente, eventoManualDTO.getIdReferencia());
         }
 
         if (isNull(eventoManual)) {
@@ -55,17 +55,17 @@ public class EventoManualServiceImpl implements EventoManualService {
             log.info("Cria evento manual.");
 
             eventoManualRepository.save(
-                EventoManual.builder()
-                    .eventoManualId(EventoManualID.builder()
-                        .uid(geraUIDEventoManual())
-                        .cliente(cliente)
-                        .build())
-                    .moeda(eventoManualDTO.getMoeda())
-                    .motivo(eventoManualDTO.getMotivo())
-                    .tipo(eventoManualDTO.getTipo())
-                    .idReferencia(eventoManualDTO.getIdReferencia())
-                    .dtCriacao(LocalDateTime.now())
-                    .build());
+                    EventoManual.builder()
+                            .eventoManualId(EventoManualID.builder()
+                                    .uid(geraUIDEventoManual())
+                                    .cliente(cliente)
+                                    .build())
+                            .moeda(eventoManualDTO.getMoeda())
+                            .motivo(eventoManualDTO.getMotivo())
+                            .tipo(eventoManualDTO.getTipo())
+                            .idReferencia(eventoManualDTO.getIdReferencia())
+                            .dtCriacao(LocalDateTime.now())
+                            .build());
 
             return buildRetornoDTO(true);
         }
@@ -77,7 +77,7 @@ public class EventoManualServiceImpl implements EventoManualService {
         var uid = UUID.randomUUID().toString();
 
         var eventoManualOptional = eventoManualRepository
-            .findByEventoManualIdUid(uid);
+                .findByEventoManualIdUid(uid);
 
         if (eventoManualOptional.isPresent())
             return geraUIDEventoManual();
@@ -90,7 +90,7 @@ public class EventoManualServiceImpl implements EventoManualService {
 
         log.info("SERVICE: CRIA EVENTO MANUAL");
 
-        log.info("Busca cliente." );
+        log.info("Busca cliente.");
 
         var cliente = clienteService.buscaCliente(app, idCliente);
 

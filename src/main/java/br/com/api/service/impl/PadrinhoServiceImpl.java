@@ -1,9 +1,11 @@
 package br.com.api.service.impl;
 
-import br.com.api.dto.ClienteDTO;
-import br.com.api.dto.PadrinhoSaldoDTO;
-import br.com.api.dto.PromoCodeDTO;
+import br.com.api.dto.*;
 import br.com.api.model.App;
+import br.com.api.model.EventoPadrinho;
+import br.com.api.model.EventoPadrinhoID;
+import br.com.api.repository.EventoAfiliadoRepository;
+import br.com.api.repository.EventoManualRepository;
 import br.com.api.repository.EventoPadrinhoRepository;
 import br.com.api.repository.PromoCodeRepository;
 import br.com.api.service.PadrinhoService;
@@ -13,12 +15,9 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeFormatterBuilder;
-import java.time.temporal.ChronoField;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.*;
 
+import static br.com.api.util.DateFormatter.dateFormatter;
 import static java.util.Objects.nonNull;
 
 @Log4j2
@@ -28,11 +27,17 @@ import static java.util.Objects.nonNull;
 public class PadrinhoServiceImpl implements PadrinhoService {
 
     private final ClienteServiceImpl clienteService;
-
     private final EventoPadrinhoRepository eventoPadrinhoRepository;
-
+    private final EventoAfiliadoRepository eventoAfiliadoRepository;
+    private final EventoManualRepository eventoManualRepository;
     private final PromoCodeRepository promoCodeRepository;
 
+    private static RetornoDTO buildRetornoDTO(Boolean ok) {
+        return RetornoDTO.
+                builder()
+                .ok(ok)
+                .build();
+    }
 
     @Override
     public PadrinhoSaldoDTO consultaSaldo(final App app, final String idCliente) {
@@ -57,7 +62,7 @@ public class PadrinhoServiceImpl implements PadrinhoService {
 
     @Override
     public List<PromoCodeDTO> consultaDetalhada(final App app, final String idCliente, final String dataInicio, final String dataFim,
-        final ClienteDTO clientePadrinhoDTO) {
+                                                final ClienteDTO clientePadrinhoDTO) {
 
         log.info("SERVICE: CONSULTA DETALHADA");
 
@@ -69,24 +74,113 @@ public class PadrinhoServiceImpl implements PadrinhoService {
 
         var promoCodesPadrinho = promoCodeRepository.findByPromoCodeIdClientePadrinho(clientePadrinho);
 
-        log.info("Converte as datas.");
-
-        DateTimeFormatter formatter = new DateTimeFormatterBuilder().appendPattern("yyyy-MM-dd")
-            .parseDefaulting(ChronoField.HOUR_OF_DAY, 0).toFormatter();
-
         log.info("Consulta detalhada dos promocodes.");
 
         return promoCodesPadrinho.stream().map(promoCode -> eventoPadrinhoRepository
-                .consultaEventosPromoCode(promoCode, LocalDateTime.parse(dataInicio, formatter), LocalDateTime.parse(dataFim, formatter))
+                .consultaEventosPromoCode(promoCode, dateFormatter(dataInicio), dateFormatter(dataFim))
                 .orElse(PromoCodeDTO.builder()
-                    .code(promoCode.getPromoCode())
-                    .produto(promoCode.getPromoCodeId()
-                        .getProduto().getNome())
-                    .qtdAfiliados(0L)
-                    .qtdAtivacoes(0L)
-                    .moedas(0L)
-                    .build()))
-            .collect(Collectors.toList());
+                        .code(promoCode.getPromoCode())
+                        .produto(promoCode.getPromoCodeId()
+                                .getProduto().getNome())
+                        .qtdAfiliados(0L)
+                        .qtdAtivacoes(0L)
+                        .moedas(0L)
+                        .build())).toList();
+    }
+
+    private String geraUIDEventoPadrinho() {
+        var uid = UUID.randomUUID().toString();
+
+        var eventoPadrinhoOptional = eventoPadrinhoRepository
+                .findByEventoPadrinhoIdUid(uid);
+
+        if (eventoPadrinhoOptional.isPresent())
+            return geraUIDEventoPadrinho();
+
+        return uid;
+    }
+
+    @Override
+    public RetornoDTO aplicaPadrinho(final App app, final String idCliente, final String idReferencia) {
+
+        log.info("SERVICE: APLICA PADRINHO");
+
+        log.info("Busca cliente.");
+
+        var clienteAfiliado = clienteService.buscaCliente(app, idCliente);
+
+        log.info("Busca eventos afiliado.");
+
+        var eventosAfiliado = eventoAfiliadoRepository.consultaEventosAfiliado(clienteAfiliado);
+
+        var retornoDTO = buildRetornoDTO(false);
+
+        eventosAfiliado.forEach(eventoAfiliado -> {
+
+            log.info("Verifica duplicidade evento padrinho.");
+
+            var eventoPadrinhoOptional = eventoPadrinhoRepository
+                    .findByEventoPadrinhoIdEventoAfiliadoAndIdReferencia(eventoAfiliado, idReferencia);
+
+            if (eventoPadrinhoOptional.isEmpty()) {
+
+                var promoCode = eventoAfiliado.getEventoAfiliadoId().getPromoCode();
+                var produto = promoCode.getPromoCodeId().getProduto();
+
+                log.info("Verifica as aplicações de bonus padrinho.");
+
+                var qtAplicacoesPadrinho = eventoPadrinhoRepository.consultaQtdAplicacoesPromoCode(promoCode);
+                var limiteAplicacaoBonusPadrinho = produto.getLimiteAplicacaoBonusPadrinho();
+
+                if (limiteAplicacaoBonusPadrinho > 0 && qtAplicacoesPadrinho < limiteAplicacaoBonusPadrinho) {
+                    eventoPadrinhoRepository.save(
+                            EventoPadrinho.builder()
+                                    .eventoPadrinhoId(
+                                            EventoPadrinhoID.builder()
+                                                    .uid(geraUIDEventoPadrinho())
+                                                    .eventoAfiliado(eventoAfiliado)
+                                                    .build())
+                                    .moeda(produto.getMoedaPadrinho())
+                                    .idReferencia(idReferencia)
+                                    .dtCriacao(LocalDateTime.now())
+                                    .build());
+
+                    retornoDTO.setOk(true);
+                }
+            }
+        });
+
+        return retornoDTO;
+    }
+
+    @Override
+    public List<ExtratoDTO> consultaExtrato(final App app, final String idCliente, final String dataInicio, final String dataFim) {
+
+        log.info("SERVICE: CONSULTA EXTRATO");
+
+        log.info("Busca cliente.");
+
+        var cliente = clienteService.buscaCliente(app, idCliente);
+
+        List<ExtratoDTO> extratosDTO = new ArrayList<>();
+
+        log.info("Consulta extrato eventos padrinho.");
+
+        extratosDTO.addAll(eventoPadrinhoRepository
+                .consultaExtratoEventosPadrinho(cliente, dateFormatter(dataInicio), dateFormatter(dataFim)));
+
+        log.info("Consulta extrato eventos afiliado.");
+
+        extratosDTO.addAll(eventoAfiliadoRepository
+                .consultaExtratoEventosAfiliado(cliente, dateFormatter(dataInicio), dateFormatter(dataFim)));
+
+        log.info("Consulta extrato eventos manuais.");
+
+        extratosDTO.addAll(eventoManualRepository.consultaExtratoEventosManuais(cliente, dateFormatter(dataInicio), dateFormatter(dataFim)));
+
+        Collections.sort(extratosDTO, Comparator.comparing(ExtratoDTO::getDtInclusao));
+
+        return extratosDTO;
     }
 
 }

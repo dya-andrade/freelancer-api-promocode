@@ -10,7 +10,7 @@ CREATE TABLE public.app (
 
 INSERT INTO public.app
 (uid, dt_alteracao, dt_criacao, dt_exclusao, nome, "token")
-VALUES('26ed47e2-281eeab5e652', null, '2022-11-19 18:34', null, 'Tua Agenda', 'q4YZ$ys5etJMrmnV');
+VALUES('26ed47e2-281eeab5e652', null, '2022-11-21 18:34', null, 'Tua Agenda', 'q4YZ$ys5etJMrmnV');
 
 
 CREATE TABLE public.produto (
@@ -31,7 +31,7 @@ CREATE TABLE public.produto (
 
 INSERT INTO public.produto
 (id, dt_alteracao, dt_criacao, dt_exclusao, limite_aplicacao_bonus_padrinho, limite_aplicacoes_afiliados, moeda_afiliado, moeda_padrinho, nome, post_webhock_padrinho, app_uid)
-VALUES('ff0c-4581-97c7', null, '2022-11-19 18:36', null, 3, 1, 20, 2, 'Black Friday', 'Promoção', '26ed47e2-281eeab5e652');
+VALUES('ff0c-4581-97c7', null, '2022-11-21 18:36', null, 3, 1, 20, 2, 'Black Friday', 'Promoção', '26ed47e2-281eeab5e652');
 
 CREATE TABLE public.cliente (
 	id varchar(255) NOT NULL,
@@ -47,7 +47,7 @@ CREATE TABLE public.cliente (
 
 INSERT INTO public.cliente
 (id, dt_alteracao, dt_criacao, dt_exclusao, email, nome, app_uid)
-VALUES('4581-97c7', NULL, '2022-11-19 23:08:16.884', NULL, 'maria@gmail.com', 'Maria', '26ed47e2-281eeab5e652');
+VALUES('4581-97c7', NULL, '2022-11-21 23:08:16.884', NULL, 'maria@gmail.com', 'Maria', '26ed47e2-281eeab5e652');
 
 CREATE TABLE public.promo_code (
 	dt_alteracao timestamp NULL,
@@ -67,5 +67,5 @@ CREATE TABLE public.promo_code (
 
 INSERT INTO public.promo_code
 (dt_alteracao, dt_criacao, dt_exclusao, limite_aplicacoes_afiliados, promo_code, produto_app_uid, produto_id, cliente_padrinho_app_uid, cliente_padrinho_id)
-VALUES(NULL, '2022-11-20 09:21:00.355', NULL, 1, 'AQDC3BO', '26ed47e2-281eeab5e652', 'ff0c-4581-97c7', '26ed47e2-281eeab5e652', '4581-97c7');
+VALUES(NULL, '2022-11-21 09:21:00.355', NULL, 1, 'AQDC3BO', '26ed47e2-281eeab5e652', 'ff0c-4581-97c7', '26ed47e2-281eeab5e652', '4581-97c7');
 

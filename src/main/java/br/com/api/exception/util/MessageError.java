@@ -1,6 +1,6 @@
 package br.com.api.exception.util;
 
-public class MessageException {
+public class MessageError {
 
     public static final String PROMOCODE_NAO_ENCONTRADO = "Erro ao tentar buscar promocode, promocode não encontrado.";
     public static final String PROMOCODE_JA_APLICADO = "Erro ao tentar buscar promocode, promocode não encontrado.";
@@ -11,4 +11,6 @@ public class MessageException {
     public static final String EVENTO_SALDO_INSUFICIENTE = "Erro ao tentar criar evento, saldo insuficiente.";
     public static final String PRODUTO_NAO_ENCONTRADO = "Erro ao tentar buscar cliente, ID não encontrado.";
 
+    private MessageError() {
+    }
 }

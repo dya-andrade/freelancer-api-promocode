@@ -2,10 +2,7 @@ package br.com.api.controller;
 
 import br.com.api.controller.api.PadrinhoApi;
 import br.com.api.dto.*;
-import br.com.api.service.AppService;
-import br.com.api.service.EventoManualService;
-import br.com.api.service.PadrinhoService;
-import br.com.api.service.PromoCodeService;
+import br.com.api.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +18,8 @@ public class PadrinhoController implements PadrinhoApi {
 
     private final PadrinhoService padrinhoService;
 
+    private final AfiliadoService afiliadoService;
+
     private final PromoCodeService promoCodeService;
 
     private final EventoManualService eventoManualService;
@@ -31,8 +30,8 @@ public class PadrinhoController implements PadrinhoApi {
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/saldo/{idCliente}")
     public PadrinhoSaldoDTO consultaSaldo(
-        @RequestHeader(name = "token") String token, @PathVariable(value = "uidApp") String uidApp,
-        @PathVariable(value = "idCliente") String idCliente) {
+            @RequestHeader(name = "token") String token, @PathVariable(value = "uidApp") String uidApp,
+            @PathVariable(value = "idCliente") String idCliente) {
 
         var app = appService.autenticaApp(uidApp, token);
 
@@ -43,9 +42,9 @@ public class PadrinhoController implements PadrinhoApi {
     @ResponseStatus(HttpStatus.OK)
     @PostMapping("/detalhes/{idCliente}")
     public List<PromoCodeDTO> consultaDetalhada(
-        @RequestHeader(name = "token") String token, @PathVariable(value = "uidApp") String uidApp,
-        @PathVariable(value = "idCliente") String idCliente, @RequestParam(value = "dataInicio") String dataInicio,
-        @RequestParam(value = "dataFim") String dataFim, @RequestBody @Valid ClienteDTO clientePadrinhoDTO) {
+            @RequestHeader(name = "token") String token, @PathVariable(value = "uidApp") String uidApp,
+            @PathVariable(value = "idCliente") String idCliente, @RequestParam(value = "dataInicio") String dataInicio,
+            @RequestParam(value = "dataFim") String dataFim, @RequestBody @Valid ClienteDTO clientePadrinhoDTO) {
 
         var app = appService.autenticaApp(uidApp, token);
 
@@ -56,8 +55,8 @@ public class PadrinhoController implements PadrinhoApi {
     @ResponseStatus(HttpStatus.CREATED)
     @PutMapping("/{idCliente}/promocode/{produtoId}")
     public PromoCodeDTO criaPromoCode(
-        @RequestHeader(name = "token") String token, @PathVariable(value = "uidApp") String uidApp,
-        @PathVariable(value = "idCliente") String idCliente, @PathVariable(value = "produtoId") String produtoId) {
+            @RequestHeader(name = "token") String token, @PathVariable(value = "uidApp") String uidApp,
+            @PathVariable(value = "idCliente") String idCliente, @PathVariable(value = "produtoId") String produtoId) {
 
         var app = appService.autenticaApp(uidApp, token);
 
@@ -68,12 +67,37 @@ public class PadrinhoController implements PadrinhoApi {
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/{idCliente}/evento-manual")
     public RetornoDTO criaEventoManual(
-        @RequestHeader(name = "token") String token, @PathVariable(value = "uidApp") String uidApp,
-        @PathVariable(value = "idCliente") String idCliente, @RequestBody @Valid EventoManualDTO eventoManualDTO) {
+            @RequestHeader(name = "token") String token, @PathVariable(value = "uidApp") String uidApp,
+            @PathVariable(value = "idCliente") String idCliente, @RequestBody @Valid EventoManualDTO eventoManualDTO) {
 
         var app = appService.autenticaApp(uidApp, token);
 
         return eventoManualService.criaEventoManual(app, idCliente, eventoManualDTO);
     }
 
+    @Override
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/{idCliente}/meusAfiliados")
+    public List<AfiliadoDTO> consultaMeusAfiliados(
+            @RequestHeader(name = "token") String token, @PathVariable(value = "uidApp") String uidApp,
+            @PathVariable(value = "idCliente") String idCliente, @RequestParam(value = "dataInicio") String dataInicio,
+            @RequestParam(value = "dataFim") String dataFim) {
+
+        var app = appService.autenticaApp(uidApp, token);
+
+        return afiliadoService.consultaMeusAfiliados(app, idCliente, dataInicio, dataFim);
+    }
+
+    @Override
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/{idCliente}/extrato")
+    public List<ExtratoDTO> consultaExtrato(
+            @RequestHeader(name = "token") String token, @PathVariable(value = "uidApp") String uidApp,
+            @PathVariable(value = "idCliente") String idCliente, @RequestParam(value = "dataInicio") String dataInicio,
+            @RequestParam(value = "dataFim") String dataFim) {
+
+        var app = appService.autenticaApp(uidApp, token);
+
+        return padrinhoService.consultaExtrato(app, idCliente, dataInicio, dataFim);
+    }
 }

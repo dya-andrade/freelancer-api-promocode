@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 
-import static br.com.api.exception.util.MessageException.APP_NAO_ENCONTRADO;
+import static br.com.api.exception.util.MessageError.APP_NAO_ENCONTRADO;
 
 @Log4j2
 @Service
@@ -27,7 +27,7 @@ public class AppServiceImpl implements AppService {
         log.info("Busca app, UID: " + uidApp);
 
         return appRepository.findByUidAndToken(uidApp, token)
-            .orElseThrow(() -> new InvalidAuthenticationException(APP_NAO_ENCONTRADO));
+                .orElseThrow(() -> new InvalidAuthenticationException(APP_NAO_ENCONTRADO));
     }
 
 }

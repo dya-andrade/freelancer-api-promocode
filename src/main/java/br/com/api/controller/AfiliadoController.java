@@ -6,6 +6,7 @@ import br.com.api.dto.ClienteDTO;
 import br.com.api.dto.RetornoDTO;
 import br.com.api.service.AfiliadoService;
 import br.com.api.service.AppService;
+import br.com.api.service.PadrinhoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -21,13 +22,15 @@ public class AfiliadoController implements AfiliadoApi {
 
     private final AfiliadoService afiliadoService;
 
+    private final PadrinhoService padrinhoService;
+
     @Override
     @ResponseStatus(HttpStatus.OK)
     @PostMapping("/{idCliente}/aplicar/{promocode}")
     public AfiliadoSaldoDTO aplicaPromoCode(
-        @RequestHeader(name = "token") String token, @PathVariable(value = "uidApp") String uidApp,
-        @PathVariable(value = "idCliente") String idCliente, @PathVariable(value = "promocode") String promocode,
-        @RequestBody @Valid ClienteDTO clienteAfiliadoDTO) {
+            @RequestHeader(name = "token") String token, @PathVariable(value = "uidApp") String uidApp,
+            @PathVariable(value = "idCliente") String idCliente, @PathVariable(value = "promocode") String promocode,
+            @RequestBody @Valid ClienteDTO clienteAfiliadoDTO) {
 
         var app = appService.autenticaApp(uidApp, token);
 
@@ -43,6 +46,6 @@ public class AfiliadoController implements AfiliadoApi {
 
         var app = appService.autenticaApp(uidApp, token);
 
-        return afiliadoService.aplicaPadrinho(app, idCliente, idReferencia);
+        return padrinhoService.aplicaPadrinho(app, idCliente, idReferencia);
     }
 }

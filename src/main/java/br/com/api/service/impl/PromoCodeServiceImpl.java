@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 
-import static br.com.api.exception.util.MessageException.PRODUTO_NAO_ENCONTRADO;
+import static br.com.api.exception.util.MessageError.PRODUTO_NAO_ENCONTRADO;
 
 @Log4j2
 @Service
@@ -27,11 +27,8 @@ import static br.com.api.exception.util.MessageException.PRODUTO_NAO_ENCONTRADO;
 public class PromoCodeServiceImpl implements PromoCodeService {
 
     private final EventoPadrinhoRepository eventoPadrinhoRepository;
-
     private final PromoCodeRepository promoCodeRepository;
-
     private final ProdutoRepository produtoRepository;
-
     private final ClienteServiceImpl clienteService;
 
 
@@ -54,21 +51,21 @@ public class PromoCodeServiceImpl implements PromoCodeService {
         log.info("Busca produto, ID: " + produtoId);
 
         var buildProdutoId = ProdutoID.builder()
-            .id(produtoId)
-            .app(app)
-            .build();
+                .id(produtoId)
+                .app(app)
+                .build();
 
         var produto = produtoRepository.findById(buildProdutoId)
-            .orElseThrow(() -> new ResourceNotFoundException(PRODUTO_NAO_ENCONTRADO));
+                .orElseThrow(() -> new ResourceNotFoundException(PRODUTO_NAO_ENCONTRADO));
 
         log.info("Busca cliente.");
 
         var clientePadrinho = clienteService.buscaCliente(app, idCliente);
 
         var buildPromoCodeId = PromoCodeID.builder()
-            .clientePadrinho(clientePadrinho)
-            .produto(produto)
-            .build();
+                .clientePadrinho(clientePadrinho)
+                .produto(produto)
+                .build();
 
         log.info("Verifica se o promocode já existe.");
 
@@ -80,12 +77,12 @@ public class PromoCodeServiceImpl implements PromoCodeService {
             log.info("Cria promocode.");
 
             promoCode = promoCodeRepository.save(
-                PromoCode.builder()
-                    .promoCodeId(buildPromoCodeId)
-                    .promoCode(geraPromoCode())
-                    .limiteAplicacoesAfiliados(produto.getLimiteAplicacoesAfiliados())
-                    .dtCriacao(LocalDateTime.now())
-                    .build());
+                    PromoCode.builder()
+                            .promoCodeId(buildPromoCodeId)
+                            .promoCode(geraPromoCode())
+                            .limiteAplicacoesAfiliados(produto.getLimiteAplicacoesAfiliados())
+                            .dtCriacao(LocalDateTime.now())
+                            .build());
         } else {
             promoCode = promoCodeOptional.get();
         }
@@ -93,14 +90,14 @@ public class PromoCodeServiceImpl implements PromoCodeService {
         log.info("Consulta eventos de aplicação promocode.");
 
         return eventoPadrinhoRepository.consultaEventosPromoCode(promoCode)
-            .orElse(PromoCodeDTO.builder()
-                .code(promoCode.getPromoCode())
-                .produto(promoCode.getPromoCodeId()
-                    .getProduto().getNome())
-                .qtdAfiliados(0L)
-                .qtdAtivacoes(0L)
-                .moedas(0L)
-                .build());
+                .orElse(PromoCodeDTO.builder()
+                        .code(promoCode.getPromoCode())
+                        .produto(promoCode.getPromoCodeId()
+                                .getProduto().getNome())
+                        .qtdAfiliados(0L)
+                        .qtdAtivacoes(0L)
+                        .moedas(0L)
+                        .build());
     }
 
 }

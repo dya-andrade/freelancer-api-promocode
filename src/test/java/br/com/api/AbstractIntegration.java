@@ -11,8 +11,8 @@ import org.testcontainers.lifecycle.Startables;
 import java.util.Map;
 import java.util.stream.Stream;
 
-@ContextConfiguration(initializers = AbstractIntegrationTest.Initializer.class)
-public class AbstractIntegrationTest {
+@ContextConfiguration(initializers = AbstractIntegration.Initializer.class)
+public class AbstractIntegration {
 
     static class Initializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
 
@@ -24,9 +24,9 @@ public class AbstractIntegrationTest {
 
         private static Map<String, String> createConnectionConfiguration() {
             return Map.of(
-                "spring.datasource.url", postgreSQL.getJdbcUrl(),
-                "spring.datasource.username", postgreSQL.getUsername(),
-                "spring.datasource.password", postgreSQL.getPassword());
+                    "spring.datasource.url", postgreSQL.getJdbcUrl(),
+                    "spring.datasource.username", postgreSQL.getUsername(),
+                    "spring.datasource.password", postgreSQL.getPassword());
         }
 
         @SuppressWarnings({"unchecked", "rawtypes"})

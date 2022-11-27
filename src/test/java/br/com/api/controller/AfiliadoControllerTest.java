@@ -1,10 +1,9 @@
 package br.com.api.controller;
 
-import br.com.api.AbstractIntegrationTest;
+import br.com.api.AbstractIntegration;
 import br.com.api.dto.AfiliadoSaldoDTO;
 import br.com.api.dto.RetornoDTO;
 import br.com.api.exception.model.ExceptionResponse;
-import br.com.api.util.MockObject;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -16,13 +15,14 @@ import io.restassured.specification.RequestSpecification;
 import org.junit.jupiter.api.*;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import static br.com.api.exception.util.MessageException.*;
+import static br.com.api.exception.util.MessageError.*;
+import static br.com.api.util.MockObject.*;
 import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.*;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
-public class AfiliadoControllerTest extends AbstractIntegrationTest {
+public class AfiliadoControllerTest extends AbstractIntegration {
 
     private static ObjectMapper objectMapper;
 
@@ -35,12 +35,12 @@ public class AfiliadoControllerTest extends AbstractIntegrationTest {
 
     private static RequestSpecification specification(String url) {
         return new RequestSpecBuilder()
-            .addHeader(MockObject.HEADER_PARAM_AUTHORIZATION, MockObject.TOKEN)
-            .setBasePath("/{uidApp}/afiliado/{idCliente}" + url)
-            .setPort(MockObject.SERVER_PORT)
-            .addFilter(new RequestLoggingFilter(LogDetail.ALL))
-            .addFilter(new ResponseLoggingFilter(LogDetail.ALL))
-            .build();
+                .addHeader(HEADER_PARAM_AUTHORIZATION, TOKEN)
+                .setBasePath("/{uidApp}/afiliado/{idCliente}" + url)
+                .setPort(SERVER_PORT)
+                .addFilter(new RequestLoggingFilter(LogDetail.ALL))
+                .addFilter(new ResponseLoggingFilter(LogDetail.ALL))
+                .build();
     }
 
     @Test
@@ -49,25 +49,25 @@ public class AfiliadoControllerTest extends AbstractIntegrationTest {
     void aplicaPromoCodeAfiliadoComSucessoRetornaMoedas() throws JsonProcessingException {
 
         var content =
-            given()
-                .spec(specification("/aplicar/{promocode}"))
-                .contentType(MockObject.CONTENT_TYPE_JSON)
-                .pathParam("uidApp", MockObject.app().getUid())
-                .pathParam("idCliente", MockObject.clienteAfiliado().getClienteId().getId())
-                .pathParam("promocode", MockObject.promoCode().getPromoCode())
-                .body(MockObject.clienteAfiliadoDTO())
-                .when()
-                .post()
-                .then()
-                .statusCode(200)
-                .extract()
-                .body().asString();
+                given()
+                        .spec(specification("/aplicar/{promocode}"))
+                        .contentType(CONTENT_TYPE_JSON)
+                        .pathParam("uidApp", app().getUid())
+                        .pathParam("idCliente", clienteAfiliado().getClienteId().getId())
+                        .pathParam("promocode", promoCode().getPromoCode())
+                        .body(clienteAfiliadoDTO())
+                        .when()
+                        .post()
+                        .then()
+                        .statusCode(200)
+                        .extract()
+                        .body().asString();
 
         var afiliadoSaldoDTO = objectMapper.readValue(content, AfiliadoSaldoDTO.class);
 
         assertNotNull(afiliadoSaldoDTO);
 
-        assertEquals(afiliadoSaldoDTO.getMoedas(), MockObject.produto().getMoedaAfiliado());
+        assertEquals(afiliadoSaldoDTO.getMoedas(), produto().getMoedaAfiliado());
     }
 
     @Test
@@ -76,25 +76,25 @@ public class AfiliadoControllerTest extends AbstractIntegrationTest {
     void aplicaPromoCodeAfiliadoComPromoCodeJaAplicado() throws JsonProcessingException {
 
         var content =
-            given()
-                .spec(specification("/aplicar/{promocode}"))
-                .contentType(MockObject.CONTENT_TYPE_JSON)
-                .pathParam("uidApp", MockObject.app().getUid())
-                .pathParam("idCliente", MockObject.clienteAfiliado().getClienteId().getId())
-                .pathParam("promocode", MockObject.promoCode().getPromoCode())
-                .body(MockObject.clienteAfiliadoDTO())
-                .when()
-                .post()
-                .then()
-                .statusCode(409)
-                .extract()
-                .body().asString();
+                given()
+                        .spec(specification("/aplicar/{promocode}"))
+                        .contentType(CONTENT_TYPE_JSON)
+                        .pathParam("uidApp", app().getUid())
+                        .pathParam("idCliente", clienteAfiliado().getClienteId().getId())
+                        .pathParam("promocode", promoCode().getPromoCode())
+                        .body(clienteAfiliadoDTO())
+                        .when()
+                        .post()
+                        .then()
+                        .statusCode(409)
+                        .extract()
+                        .body().asString();
 
         var exceptionResponse = objectMapper.readValue(content, ExceptionResponse.class);
 
         assertNotNull(exceptionResponse);
 
-        assertEquals(exceptionResponse.getMessage(), PROMOCODE_JA_APLICADO);
+        assertEquals(PROMOCODE_JA_APLICADO, exceptionResponse.getMessage());
     }
 
     @Test
@@ -103,25 +103,25 @@ public class AfiliadoControllerTest extends AbstractIntegrationTest {
     void aplicaPromoCodeAfiliadoComPadrinhoComoAfiliado() throws JsonProcessingException {
 
         var content =
-            given()
-                .spec(specification("/aplicar/{promocode}"))
-                .contentType(MockObject.CONTENT_TYPE_JSON)
-                .pathParam("uidApp", MockObject.app().getUid())
-                .pathParam("idCliente", MockObject.clientePadrinho().getClienteId().getId())
-                .pathParam("promocode", MockObject.promoCode().getPromoCode())
-                .body(MockObject.clientePadrinhoDTO())
-                .when()
-                .post()
-                .then()
-                .statusCode(409)
-                .extract()
-                .body().asString();
+                given()
+                        .spec(specification("/aplicar/{promocode}"))
+                        .contentType(CONTENT_TYPE_JSON)
+                        .pathParam("uidApp", app().getUid())
+                        .pathParam("idCliente", clientePadrinho().getClienteId().getId())
+                        .pathParam("promocode", promoCode().getPromoCode())
+                        .body(clientePadrinhoDTO())
+                        .when()
+                        .post()
+                        .then()
+                        .statusCode(409)
+                        .extract()
+                        .body().asString();
 
         var exceptionResponse = objectMapper.readValue(content, ExceptionResponse.class);
 
         assertNotNull(exceptionResponse);
 
-        assertEquals(exceptionResponse.getMessage(), PROMOCODE_APLICACAO_PADRINHO);
+        assertEquals(PROMOCODE_APLICACAO_PADRINHO, exceptionResponse.getMessage());
     }
 
     @Test
@@ -130,25 +130,25 @@ public class AfiliadoControllerTest extends AbstractIntegrationTest {
     void aplicaPromoCodeAfiliadoComPromoCodeExpirado() throws JsonProcessingException {
 
         var content =
-            given()
-                .spec(specification("/aplicar/{promocode}"))
-                .contentType(MockObject.CONTENT_TYPE_JSON)
-                .pathParam("uidApp", MockObject.app().getUid())
-                .pathParam("idCliente", MockObject.clienteAfiliado2().getClienteId().getId())
-                .pathParam("promocode", MockObject.promoCode().getPromoCode())
-                .body(MockObject.clienteAfiliadoDTO2())
-                .when()
-                .post()
-                .then()
-                .statusCode(409)
-                .extract()
-                .body().asString();
+                given()
+                        .spec(specification("/aplicar/{promocode}"))
+                        .contentType(CONTENT_TYPE_JSON)
+                        .pathParam("uidApp", app().getUid())
+                        .pathParam("idCliente", clienteAfiliado2().getClienteId().getId())
+                        .pathParam("promocode", promoCode().getPromoCode())
+                        .body(clienteAfiliadoDTO2())
+                        .when()
+                        .post()
+                        .then()
+                        .statusCode(409)
+                        .extract()
+                        .body().asString();
 
         var exceptionResponse = objectMapper.readValue(content, ExceptionResponse.class);
 
         assertNotNull(exceptionResponse);
 
-        assertEquals(exceptionResponse.getMessage(), PROMOCODE_EXPIRADO);
+        assertEquals(PROMOCODE_EXPIRADO, exceptionResponse.getMessage());
     }
 
     @Test
@@ -159,10 +159,10 @@ public class AfiliadoControllerTest extends AbstractIntegrationTest {
         var content =
                 given()
                         .spec(specification("/aplicarPadrinho/{idReferencia}"))
-                        .contentType(MockObject.CONTENT_TYPE_JSON)
-                        .pathParam("uidApp", MockObject.app().getUid())
-                        .pathParam("idCliente", MockObject.clienteAfiliado().getClienteId().getId())
-                        .pathParam("idReferencia", MockObject.eventoPadrinho().getIdReferencia())
+                        .contentType(CONTENT_TYPE_JSON)
+                        .pathParam("uidApp", app().getUid())
+                        .pathParam("idCliente", clienteAfiliado().getClienteId().getId())
+                        .pathParam("idReferencia", eventoPadrinho().getIdReferencia())
                         .when()
                         .post()
                         .then()
@@ -185,10 +185,10 @@ public class AfiliadoControllerTest extends AbstractIntegrationTest {
         var content =
                 given()
                         .spec(specification("/aplicarPadrinho/{idReferencia}"))
-                        .contentType(MockObject.CONTENT_TYPE_JSON)
-                        .pathParam("uidApp", MockObject.app().getUid())
-                        .pathParam("idCliente", MockObject.clienteAfiliado().getClienteId().getId())
-                        .pathParam("idReferencia", MockObject.eventoPadrinho().getIdReferencia())
+                        .contentType(CONTENT_TYPE_JSON)
+                        .pathParam("uidApp", app().getUid())
+                        .pathParam("idCliente", clienteAfiliado().getClienteId().getId())
+                        .pathParam("idReferencia", eventoPadrinho().getIdReferencia())
                         .when()
                         .post()
                         .then()

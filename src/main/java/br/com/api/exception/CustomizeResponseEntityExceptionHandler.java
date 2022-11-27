@@ -18,28 +18,28 @@ public class CustomizeResponseEntityExceptionHandler extends ResponseEntityExcep
     @ExceptionHandler(Exception.class)
     public final ResponseEntity<ExceptionResponse> handleAllExceptions(Exception ex, WebRequest request) {
         ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), ex.getMessage(),
-            request.getDescription(false));
+                request.getDescription(false));
         return new ResponseEntity<>(exceptionResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(ResourceNotFoundException.class)
     public final ResponseEntity<ExceptionResponse> handleNotFoundExceptions(Exception ex, WebRequest request) {
         ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), ex.getMessage(),
-            request.getDescription(false));
+                request.getDescription(false));
         return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(InvalidAuthenticationException.class)
     public final ResponseEntity<ExceptionResponse> handleInvalidAuthenticationExceptions(Exception ex, WebRequest request) {
         ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), ex.getMessage(),
-            request.getDescription(false));
+                request.getDescription(false));
         return new ResponseEntity<>(exceptionResponse, HttpStatus.FORBIDDEN);
     }
 
     @ExceptionHandler(ResourceConflictException.class)
     public final ResponseEntity<ExceptionResponse> handleConflictExceptions(Exception ex, WebRequest request) {
         ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), ex.getMessage(),
-            request.getDescription(false));
+                request.getDescription(false));
         return new ResponseEntity<>(exceptionResponse, HttpStatus.CONFLICT);
     }
 

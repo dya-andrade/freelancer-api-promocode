@@ -1,0 +1,313 @@
+{
+  "info": {
+    "_postman_id": "6dd2aa72-6164-4a80-9e7d-f5818235b734",
+    "name": "promo_code",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "16127198"
+  },
+  "item": [
+    {
+      "name": "afiliado",
+      "item": [
+        {
+          "name": "aplica promocode",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "token",
+                "value": "q4YZ$ys5etJMrmnV",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"nome\":\"Joana\",\r\n    \"email\":\"joana@gmail.com\" \r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/26ed47e2-281eeab5e652/afiliado/1/aplicar/IFLGMIO",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "26ed47e2-281eeab5e652",
+                "afiliado",
+                "1",
+                "aplicar",
+                "IFLGMIO"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "aplica padrinho",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "token",
+                "value": "q4YZ$ys5etJMrmnV",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"nome\":\"Joana\",\r\n    \"email\":\"joana@gmail.com\" \r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/26ed47e2-281eeab5e652/afiliado/1/aplicarPadrinho/223-777",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "26ed47e2-281eeab5e652",
+                "afiliado",
+                "1",
+                "aplicarPadrinho",
+                "223-777"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "padrinho",
+      "item": [
+        {
+          "name": "consulta detalhada",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "token",
+                "value": "q4YZ$ys5etJMrmnV",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"nome\":\"Maria\",\r\n    \"email\":\"maria@gmail.com\" \r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/26ed47e2-281eeab5e652/padrinho/detalhes/2?dataInicio=2022-11-19&dataFim=2022-11-30",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "26ed47e2-281eeab5e652",
+                "padrinho",
+                "detalhes",
+                "2"
+              ],
+              "query": [
+                {
+                  "key": "dataInicio",
+                  "value": "2022-11-19"
+                },
+                {
+                  "key": "dataFim",
+                  "value": "2022-11-30"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "consulta meus afiliados",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "token",
+                "value": "q4YZ$ys5etJMrmnV",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/26ed47e2-281eeab5e652/padrinho/2/meusAfiliados?dataInicio=2022-11-19&dataFim=2022-11-30",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "26ed47e2-281eeab5e652",
+                "padrinho",
+                "2",
+                "meusAfiliados"
+              ],
+              "query": [
+                {
+                  "key": "dataInicio",
+                  "value": "2022-11-19"
+                },
+                {
+                  "key": "dataFim",
+                  "value": "2022-11-30"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "consulta extrato",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "token",
+                "value": "q4YZ$ys5etJMrmnV",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/26ed47e2-281eeab5e652/padrinho/1/extrato?dataInicio=2022-11-19&dataFim=2022-11-30",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "26ed47e2-281eeab5e652",
+                "padrinho",
+                "1",
+                "extrato"
+              ],
+              "query": [
+                {
+                  "key": "dataInicio",
+                  "value": "2022-11-19"
+                },
+                {
+                  "key": "dataFim",
+                  "value": "2022-11-30"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "cria evento manual",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "token",
+                "value": "q4YZ$ys5etJMrmnV",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"moeda\": 5,\r\n    \"tipo\": \"ADD\",\r\n    \"motivo\": \"Adicionar saldo\",\r\n    \"idReferencia\": \"\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/26ed47e2-281eeab5e652/padrinho/1/evento-manual",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "26ed47e2-281eeab5e652",
+                "padrinho",
+                "1",
+                "evento-manual"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "cria promocode",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "token",
+                "value": "q4YZ$ys5etJMrmnV",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/26ed47e2-281eeab5e652/padrinho/2/promocode/ff0c-4581",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "26ed47e2-281eeab5e652",
+                "padrinho",
+                "2",
+                "promocode",
+                "ff0c-4581"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "consulta saldo",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "token",
+                "value": "q4YZ$ys5etJMrmnV",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/26ed47e2-281eeab5e652/padrinho/saldo/1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "26ed47e2-281eeab5e652",
+                "padrinho",
+                "saldo",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}

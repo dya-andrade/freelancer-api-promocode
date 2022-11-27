@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 
-import static br.com.api.exception.util.MessageException.CLIENTE_NAO_ENCONTRADO;
+import static br.com.api.exception.util.MessageError.CLIENTE_NAO_ENCONTRADO;
 
 @Log4j2
 @Service
@@ -26,9 +26,9 @@ public class ClienteServiceImpl implements ClienteService {
 
     private static ClienteID buildClienteID(final App app, final String idCliente) {
         return ClienteID.builder()
-            .id(idCliente)
-            .app(app)
-            .build();
+                .id(idCliente)
+                .app(app)
+                .build();
     }
 
     @Override
@@ -39,12 +39,12 @@ public class ClienteServiceImpl implements ClienteService {
 
         if (cliente.isEmpty())
             return clienteRepository.save(
-                Cliente.builder()
-                    .clienteId(buildClienteID(app, idCliente))
-                    .nome(clienteDTO.getNome())
-                    .email(clienteDTO.getEmail())
-                    .dtCriacao(LocalDateTime.now())
-                    .build());
+                    Cliente.builder()
+                            .clienteId(buildClienteID(app, idCliente))
+                            .nome(clienteDTO.getNome())
+                            .email(clienteDTO.getEmail())
+                            .dtCriacao(LocalDateTime.now())
+                            .build());
 
         return cliente.get();
     }
@@ -54,7 +54,7 @@ public class ClienteServiceImpl implements ClienteService {
         log.info("Buscando cliente, ID: " + idCliente);
 
         return clienteRepository.findById(buildClienteID(app, idCliente))
-            .orElseThrow(() -> new ResourceNotFoundException(CLIENTE_NAO_ENCONTRADO));
+                .orElseThrow(() -> new ResourceNotFoundException(CLIENTE_NAO_ENCONTRADO));
     }
 
 }
